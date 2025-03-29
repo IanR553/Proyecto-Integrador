@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<BorderPane prefHeight="526.0" prefWidth="691.0" style="-fx-background-color: beige;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ReservaController">
+
+    <top>
+        <ImageView fitHeight="88.0" fitWidth="407.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+            <image>
+                <Image url="@../../../../../Desktop/Ian/ProyectoIntegrador1/resources/images/logo-udi.png" />
+            </image>
+        </ImageView>
+    </top>
+    
+    <center>
+        <AnchorPane prefHeight="441.0" prefWidth="552.0" BorderPane.alignment="CENTER">
+            <children>
+                <!-- Título del calendario -->
+                <Label layoutX="126.0" layoutY="20.0" style="-fx-font-size: 20px; -fx-text-fill: #004a99;" text="Calendario de Reservas" />
+
+                <!-- Cuadrícula del calendario -->
+                <GridPane layoutX="33.0" layoutY="71.0" prefHeight="377.0" prefWidth="586.0" AnchorPane.leftAnchor="33.0" AnchorPane.rightAnchor="-15.666666666666629">
+                    <!-- Títulos de los días -->
+                    <Label prefHeight="31.0" prefWidth="120.0" style="-fx-font-size: 14px; -fx-text-fill: #ffffff; -fx-background-color: #004a99; -fx-padding: 5px;" text="Lunes" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                    <Label prefHeight="31.0" prefWidth="120.0" style="-fx-font-size: 14px; -fx-text-fill: #ffffff; -fx-background-color: #004a99; -fx-padding: 5px;" text="Martes" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                    <Label prefHeight="31.0" prefWidth="120.0" style="-fx-font-size: 14px; -fx-text-fill: #ffffff; -fx-background-color: #004a99; -fx-padding: 5px;" text="Miércoles" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                    <Label prefHeight="31.0" prefWidth="120.0" style="-fx-font-size: 14px; -fx-text-fill: #ffffff; -fx-background-color: #004a99; -fx-padding: 5px;" text="Jueves" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+                    <Label prefHeight="31.0" prefWidth="120.0" style="-fx-font-size: 14px; -fx-text-fill: #ffffff; -fx-background-color: #004a99; -fx-padding: 5px;" text="Viernes" GridPane.columnIndex="4" GridPane.rowIndex="0" />
+                    
+                    <!-- Semana 1 (Lunes a Domingo) -->
+                    <Label prefHeight="150.0" prefWidth="120.0" style="-fx-font-size: 12px; -fx-text-fill: black; -fx-background-color: #f0f0f0; -fx-padding: 15px; -fx-alignment: center; -fx-border-color: #dcdcdc;" GridPane.rowIndex="2" />
+                    <Label prefHeight="150.0" prefWidth="120.0" style="-fx-font-size: 12px; -fx-text-fill: black; -fx-background-color: #f0f0f0; -fx-padding: 15px; -fx-alignment: center; -fx-border-color: #dcdcdc;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                    <Label prefHeight="150.0" prefWidth="120.0" style="-fx-font-size: 12px; -fx-text-fill: black; -fx-background-color: #f0f0f0; -fx-padding: 15px; -fx-alignment: center; -fx-border-color: #dcdcdc;" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                    <Label prefHeight="150.0" prefWidth="120.0" style="-fx-font-size: 12px; -fx-text-fill: black; -fx-background-color: #f0f0f0; -fx-padding: 15px; -fx-alignment: center; -fx-border-color: #dcdcdc;" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                    <Label prefHeight="150.0" prefWidth="120.0" style="-fx-font-size: 12px; -fx-text-fill: black; -fx-background-color: #f0f0f0; -fx-padding: 15px; -fx-alignment: center; -fx-border-color: #dcdcdc;" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                    <Label prefHeight="150.0" prefWidth="120.0" style="-fx-font-size: 12px; -fx-text-fill: black; -fx-background-color: #f0f0f0; -fx-padding: 15px; -fx-alignment: center; -fx-border-color: #dcdcdc;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                    <Label prefHeight="150.0" prefWidth="120.0" style="-fx-font-size: 12px; -fx-text-fill: black; -fx-background-color: #f0f0f0; -fx-padding: 15px; -fx-alignment: center; -fx-border-color: #dcdcdc;" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                    <Label prefHeight="150.0" prefWidth="120.0" style="-fx-font-size: 12px; -fx-text-fill: black; -fx-background-color: #f0f0f0; -fx-padding: 15px; -fx-alignment: center; -fx-border-color: #dcdcdc;" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                    <Label prefHeight="150.0" prefWidth="120.0" style="-fx-font-size: 12px; -fx-text-fill: black; -fx-background-color: #f0f0f0; -fx-padding: 15px; -fx-alignment: center; -fx-border-color: #dcdcdc;" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+               <Label prefHeight="150.0" prefWidth="120.0" style="-fx-font-size: 12px; -fx-text-fill: black; -fx-background-color: #f0f0f0; -fx-padding: 15px; -fx-alignment: center; -fx-border-color: #dcdcdc;" GridPane.rowIndex="1" />
+               <columnConstraints>
+                  <ColumnConstraints />
+                  <ColumnConstraints />
+                  <ColumnConstraints />
+                  <ColumnConstraints />
+                  <ColumnConstraints />
+                  <ColumnConstraints />
+                  <ColumnConstraints />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+               </rowConstraints>
+                </GridPane>
+            <Label layoutX="-6.0" layoutY="154.0" rotate="-90.0" text="SEMANA 1" />
+            <Label layoutX="-6.0" layoutY="308.0" rotate="-90.0" text="SEMANA 2" />
+            </children>
+        </AnchorPane>
+    </center>
+</BorderPane>

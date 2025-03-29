@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="500.0" prefWidth="450.0" style="-fx-background-color: beige;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ReservaController">
+
+    <top>
+        <ImageView fitHeight="88.0" fitWidth="407.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+            <image>
+                <Image url="@../../../../../Desktop/Ian/ProyectoIntegrador1/resources/images/logo-udi.png" />
+            </image>
+        </ImageView>
+    </top>
+   <center>
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="500.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="btnReservaSala1" layoutX="125.0" layoutY="124.0" maxWidth="250" prefHeight="26.0" prefWidth="200.0" style="-fx-background-color: #0073e6; -fx-text-fill: white;" text="Reservar Sala">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+               
+                  <Button fx:id="btnReservaSala" layoutX="125.0" layoutY="184.0" maxWidth="250" prefHeight="26.0" prefWidth="200.0" style="-fx-background-color: #0073e6; -fx-text-fill: white;" text="Reservar Equipo">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+                   
+                  <Button fx:id="btnReservaEquipo" layoutX="124.0" layoutY="298.0" maxWidth="250" prefHeight="26.0" prefWidth="201.0" style="-fx-background-color: #004a99; -fx-text-fill: white;" text="Ver Reservas" textFill="#004a99">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Label layoutX="135.0" layoutY="46.0" text="GESTOR DE RESERVAS" textFill="#121213">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>
+
