@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="658.0" prefWidth="520.0" style="-fx-background-color: beige;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.SalaController">
+
+    <top>
+        <ImageView fitHeight="88.0" fitWidth="407.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+            <image>
+                <Image url="@../../../../../Desktop/Ian/ProyectoIntegrador1/resources/images/logo-udi.png" />
+            </image>
+        </ImageView>
+    </top>
+
+    <center>
+        <VBox alignment="CENTER" prefHeight="637.0" prefWidth="520.0" spacing="10">
+            <Label style="-fx-font-size: 20px; -fx-text-fill: #004a99;" text="Reserva de Equipo" />
+
+            <Label text="Seleccione los equipos necesarios:" />
+         <Spinner fx:id="spnCapacidad1" maxWidth="250" />
+
+            <Label text="Seleccione los software requeridos:" />
+         <Spinner fx:id="spnCapacidad2" maxWidth="250" />
+
+            <Label text="Solo podra reservar para el dia de hoy" />
+            
+            <Label text="Hora de inicio:" />
+            <TextField fx:id="txtHoraInicio" maxWidth="250" promptText="Ejemplo: 08:00 AM" />
+            
+            <Label text="Hora de fin:" />
+            <TextField fx:id="txtHoraFin" maxWidth="250" promptText="Ejemplo: 10:00 AM" />
+
+            <!-- Botón para buscar salas disponibles -->
+            <Button fx:id="btnBuscarSalas" maxWidth="250" style="-fx-background-color: #004a99; -fx-text-fill: white;" text="Buscar Equipos en salas disponibles" />
+            
+            <!-- Sección para mostrar salas disponibles -->
+            <Label style="-fx-font-size: 16px; -fx-text-fill: #004a99;" text="Salas Disponibles:" />
+            <ListView fx:id="listSalasDisponibles" maxHeight="150" maxWidth="250" />
+
+            <!-- Botón para reservar (se activará después de la búsqueda) -->
+            <Button fx:id="btnReservar" disable="true" maxWidth="250" style="-fx-background-color: #0073e6; -fx-text-fill: white;" text="Reservar Sala" /> 
+        </VBox>
+    </center>
+</BorderPane>
