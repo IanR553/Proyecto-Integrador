@@ -1,7 +1,122 @@
 package data;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 
+import model.Rol;
+import model.Usuario;
 
-public class UsuarioDAO {
+public class UsuarioDAO implements CRUD_operaciones<Usuario, Integer> {
 
+    private Connection connection;
+
+    public UsuarioDAO(Connection connection) {
+        this.connection = connection;
+    }
+
+    @Override
+    public void save(Usuario usuario) {
+        String query = "INSERT INTO Usuario (cedula, primerNombre, segundoNombre, primerApellido, segundoApellido, correoElectronico, celular, idRol) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setInt(1, usuario.getCedula());
+            pstmt.setString(2, usuario.getPrimerNombre());
+            pstmt.setString(3, usuario.getSegundoNombre());
+            pstmt.setString(4, usuario.getPrimerApellido());
+            pstmt.setString(5, usuario.getSegundoApellido());
+            pstmt.setString(6, usuario.getCorreoElectronico());
+            pstmt.setInt(7, usuario.getCelular());
+            pstmt.setInt(8, usuario.getRol().getId());
+
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public ArrayList<Usuario> fetch() {
+        ArrayList<Usuario> usuarios = new ArrayList<>();
+        String query = "SELECT u.cedula, u.primerNombre, u.segundoNombre, u.primerApellido, u.segundoApellido, " +
+                       "u.correoElectronico, u.celular, r.id as rol_id, r.nombre as rol_nombre " +
+                       "FROM Usuario u JOIN Rol r ON u.idRol = r.id";
+
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+
+            while (rs.next()) {
+                Rol rol = new Rol(rs.getInt("rol_id"), rs.getString("rol_nombre"));
+
+                int cedula = rs.getInt("cedula");
+                String primerNombre = rs.getString("primerNombre");
+                String segundoNombre = rs.getString("segundoNombre");
+                String primerApellido = rs.getString("primerApellido");
+                String segundoApellido = rs.getString("segundoApellido");
+                String correoElectronico = rs.getString("correoElectronico");
+                int celular = rs.getInt("celular");
+                
+                Usuario usuario = new Usuario(cedula, primerNombre, segundoNombre, primerApellido, segundoApellido, correoElectronico, celular, rol);
+                usuarios.add(usuario);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return usuarios;
+    }
+
+    @Override
+    public void update(Usuario usuario) {
+        String query = "UPDATE Usuario SET primerNombre=?, segundoNombre=?, primerApellido=?, segundoApellido=?, correoElectronico=?, celular=?, idRol=? WHERE cedula=?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, usuario.getPrimerNombre());
+            pstmt.setString(2, usuario.getSegundoNombre());
+            pstmt.setString(3, usuario.getPrimerApellido());
+            pstmt.setString(4, usuario.getSegundoApellido());
+            pstmt.setString(5, usuario.getCorreoElectronico());
+            pstmt.setInt(6, usuario.getCelular());
+            pstmt.setInt(7, usuario.getRol().getId());
+            pstmt.setInt(8, usuario.getCedula());
+
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void delete(Integer cedula) {
+        String query = "DELETE FROM Usuario WHERE cedula=?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setInt(1, cedula);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public boolean authenticate(Integer cedula) {
+        String query = "SELECT cedula FROM Usuario WHERE cedula=?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setInt(1, cedula);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+    			return rs.getInt("cedula")==cedula;
+    			}
+    		} catch (SQLException e) {
+    		e.printStackTrace();}
+    		
+    		return false;
+    	}
 }
+
