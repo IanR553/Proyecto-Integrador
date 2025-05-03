@@ -1,51 +1,59 @@
 package model;
 
 public class Reserva {
-	
-	private int id;
-	private boolean estado;
-	private String tipo;
-	private int cedUsuario;
-	private int idHorario;
-	
-	public Reserva(int id, boolean estado, String tipo, int cedUsuario, int idHorario) {
-		super();
-		this.id = id;
-		this.estado = estado;
-		this.tipo = tipo;
-		this.cedUsuario = cedUsuario;
-		this.idHorario = idHorario;
-	}
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
-	public boolean isEstado() {
-		return estado;
-	}
-	public void setEstado(boolean estado) {
-		this.estado = estado;
-	}
-	public String getTipo() {
-		return tipo;
-	}
-	public void setTipo(String tipo) {
-		this.tipo = tipo;
-	}
-	public int getCedUsuario() {
-		return cedUsuario;
-	}
-	public void setCedUsuario(int cedUsuario) {
-		this.cedUsuario = cedUsuario;
-	}
-	public int getIdHorario() {
-		return idHorario;
-	}
-	public void setIdHorario(int idHorario) {
-		this.idHorario = idHorario;
-	}
-	
-	
+
+    private int id;
+    private String estado; // "cancelada", "aprobada", "pendiente"
+    private String tipo;
+    private Usuario usuario;
+    private Horario horario;
+
+    public Reserva(int id, String estado, String tipo, Usuario usuario, Horario horario) {
+        this.id = id;
+        this.estado = estado;
+        this.tipo = tipo;
+        this.usuario = usuario;
+        this.horario = horario;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public Horario getHorario() {
+        return horario;
+    }
+
+    public void setHorario(Horario horario) {
+        this.horario = horario;
+    }
 }
+

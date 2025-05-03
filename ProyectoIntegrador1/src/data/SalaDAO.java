@@ -29,10 +29,6 @@ public class SalaDAO implements CRUD_operaciones<Sala, Integer> {
             pstmt.setString(5, sala.getUbicacion());
             pstmt.setString(6, sala.getSoftware());
 
-            int rowsAffected = pstmt.executeUpdate();
-            if (rowsAffected > 0) {
-            	showAlert("Sala insertado exitosamente.", "Registro exitoso", Alert.AlertType.INFORMATION);
-            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -102,16 +98,17 @@ public class SalaDAO implements CRUD_operaciones<Sala, Integer> {
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
 
-			if (rs.next()) {
-			return rs.getInt("id")==id;
-			}
-		} catch (SQLException e) {
-		e.printStackTrace();}
-		
-		return false;
-	}
-    
-    public void showAlert(String mensaje,String header, Alert.AlertType tipoAlerta) {
+            if (rs.next()) {
+                return rs.getInt("id") == id;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public void showAlert(String mensaje, String header, Alert.AlertType tipoAlerta) {
         Alert alert = new Alert(tipoAlerta);
         alert.setTitle("Alerta");
         alert.setHeaderText(header);

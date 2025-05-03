@@ -6,7 +6,7 @@ public class Mantenimiento {
 	
 	private int id;
 	private String motivo;
-	private String tipo;
+	private String tipo;  //"preventivo", "correctivo"
 	private LocalDate fechaInicio;
 	private LocalDate fechaFinalPropuesta;
 	

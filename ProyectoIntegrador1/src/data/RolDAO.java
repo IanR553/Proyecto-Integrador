@@ -1,5 +1,8 @@
 package data;
 
+import javafx.scene.control.Alert;
+import model.Rol;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,26 +10,20 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import javafx.scene.control.Alert;
-import model.Equipo;
-
-public class EquipoDAO implements CRUD_operaciones<Equipo, Integer> {
+public class RolDAO implements CRUD_operaciones<Rol, Integer> {
     private Connection connection;
 
-    public EquipoDAO(Connection connection) {
+    public RolDAO(Connection connection) {
         this.connection = connection;
     }
 
     @Override
-    public void save(Equipo equipo) {
-        String query = "INSERT INTO Equipo (id, tipo, estado, marca, software) VALUES (?, ?, ?, ?, ?)";
+    public void save(Rol rol) {
+        String sql = "INSERT INTO Rol (id, nombre) VALUES (?, ?)";
 
-        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setInt(1, equipo.getId());
-            pstmt.setString(2, equipo.getTipo());
-            pstmt.setBoolean(3, equipo.isEstado());
-            pstmt.setString(4, equipo.getMarca());
-            pstmt.setString(5, equipo.getSoftware());
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, rol.getId());
+            pstmt.setString(2, rol.getNombre());
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -35,40 +32,34 @@ public class EquipoDAO implements CRUD_operaciones<Equipo, Integer> {
     }
 
     @Override
-    public ArrayList<Equipo> fetch() {
-        ArrayList<Equipo> equipos = new ArrayList<>();
-        String query = "SELECT * FROM Equipo";
+    public ArrayList<Rol> fetch() {
+        ArrayList<Rol> roles = new ArrayList<>();
+        String sql = "SELECT * FROM Rol";
 
         try (Statement stmt = connection.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
+             ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
                 int id = rs.getInt("id");
-                String tipo = rs.getString("tipo");
-                boolean estado = rs.getBoolean("estado");
-                String marca = rs.getString("marca");
-                String software = rs.getString("software");
+                String nombre = rs.getString("nombre");
 
-                Equipo equipo = new Equipo(id, tipo, estado, marca, software);
-                equipos.add(equipo);
+                Rol rol = new Rol(id, nombre);
+                roles.add(rol);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return equipos;
+        return roles;
     }
 
     @Override
-    public void update(Equipo equipo) {
-        String sql = "UPDATE Equipo SET tipo=?, estado=?, marca=?, software=? WHERE id=?";
+    public void update(Rol rol) {
+        String sql = "UPDATE Rol SET nombre = ? WHERE id = ?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setString(1, equipo.getTipo());
-            pstmt.setBoolean(2, equipo.isEstado());
-            pstmt.setString(3, equipo.getMarca());
-            pstmt.setString(4, equipo.getSoftware());
-            pstmt.setInt(5, equipo.getId());
+            pstmt.setString(1, rol.getNombre());
+            pstmt.setInt(2, rol.getId());
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -78,7 +69,7 @@ public class EquipoDAO implements CRUD_operaciones<Equipo, Integer> {
 
     @Override
     public void delete(Integer id) {
-        String sql = "DELETE FROM Equipo WHERE id=?";
+        String sql = "DELETE FROM Rol WHERE id = ?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setInt(1, id);
@@ -90,12 +81,11 @@ public class EquipoDAO implements CRUD_operaciones<Equipo, Integer> {
 
     @Override
     public boolean authenticate(Integer id) {
-        String sql = "SELECT id FROM Equipo WHERE id=?";
+        String sql = "SELECT id FROM Rol WHERE id = ?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
-
             if (rs.next()) {
                 return rs.getInt("id") == id;
             }
@@ -106,10 +96,9 @@ public class EquipoDAO implements CRUD_operaciones<Equipo, Integer> {
         return false;
     }
 
- 
     public void showAlert(String mensaje, String header, Alert.AlertType tipoAlerta) {
         Alert alert = new Alert(tipoAlerta);
-        alert.setTitle("Alerta");
+        alert.setTitle("Mensaje del sistema");
         alert.setHeaderText(header);
         alert.setContentText(mensaje);
         alert.showAndWait();
