@@ -3,48 +3,82 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="500.0" prefWidth="450.0" style="-fx-background-color: beige;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ReservaController">
+<BorderPane prefHeight="643.0" prefWidth="614.0" style="-fx-background-color: beige;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ReservaUController">
 
     <top>
-        <ImageView fitHeight="88.0" fitWidth="407.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
-            <image>
-                <Image url="@../../../../../Desktop/Ian/ProyectoIntegrador1/resources/images/logo-udi.png" />
-            </image>
-        </ImageView>
+        <AnchorPane prefHeight="100.0" prefWidth="600.0">
+            <children>
+                <ImageView fitHeight="88.0" fitWidth="407.0" layoutX="10.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../resources/images/logo-udi.png" />
+                    </image>
+                </ImageView>
+            </children>
+        </AnchorPane>
     </top>
-   <center>
-      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="500.0" BorderPane.alignment="CENTER">
-         <children>
-            <Button fx:id="btnReservaSala1" layoutX="125.0" layoutY="124.0" maxWidth="250" prefHeight="26.0" prefWidth="200.0" style="-fx-background-color: #0073e6; -fx-text-fill: white;" text="Reservar Sala">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-               
-                  <Button fx:id="btnReservaSala" layoutX="125.0" layoutY="184.0" maxWidth="250" prefHeight="26.0" prefWidth="200.0" style="-fx-background-color: #0073e6; -fx-text-fill: white;" text="Reservar Equipo">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-                   
-                  <Button fx:id="btnReservaEquipo" layoutX="124.0" layoutY="298.0" maxWidth="250" prefHeight="26.0" prefWidth="201.0" style="-fx-background-color: #004a99; -fx-text-fill: white;" text="Ver Reservas" textFill="#004a99">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Label layoutX="135.0" layoutY="46.0" text="GESTOR DE RESERVAS" textFill="#121213">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </Label>
-         </children>
-      </AnchorPane>
-   </center>
-</BorderPane>
 
+    <center>
+        <AnchorPane prefHeight="500.0" prefWidth="634.0" BorderPane.alignment="CENTER">
+            <children>
+                <Label layoutX="206.0" layoutY="7.0" text="GESTOR DE RESERVAS" textFill="#121213">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+
+                <Button fx:id="btnReservaSala1" layoutX="200.0" layoutY="50.0" prefHeight="26.0" prefWidth="200.0" style="-fx-background-color: #0073e6; -fx-text-fill: white;" text="Reservar Sala">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+
+                <Button fx:id="btnReservaSala" layoutX="200.0" layoutY="90.0" prefHeight="26.0" prefWidth="200.0" style="-fx-background-color: #0073e6; -fx-text-fill: white;" text="Reservar Equipo">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+
+                <Button fx:id="btnReservaEquipo" layoutX="200.0" layoutY="130.0" prefHeight="26.0" prefWidth="200.0" style="-fx-background-color: #004a99; -fx-text-fill: white;" text="Ver Reservas">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+
+                <!-- Tabla Salas Reservadas -->
+                <Label layoutX="50.0" layoutY="180.0" text="Salas Reservadas:" textFill="#000000">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Label>
+                <TableView fx:id="tableSalas" layoutX="50.0" layoutY="200.0" prefHeight="120.0" prefWidth="500.0">
+                    <columns>
+                        <TableColumn fx:id="colIdSala" prefWidth="250.0" text="ID" />
+                        <TableColumn fx:id="colNombreSala" prefWidth="250.0" text="Nombre" />
+                    </columns>
+                </TableView>
+
+                <!-- Tabla Equipos Reservados -->
+                <Label layoutX="50.0" layoutY="330.0" text="Equipos Reservados:" textFill="#000000">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Label>
+                <TableView fx:id="tableEquipos" layoutX="50.0" layoutY="350.0" prefHeight="120.0" prefWidth="500.0">
+                    <columns>
+                        <TableColumn fx:id="colIdEquipo" prefWidth="250.0" text="ID" />
+                        <TableColumn fx:id="colNombreEquipo" prefWidth="250.0" text="Nombre" />
+                    </columns>
+                </TableView>
+                <Button fx:id="btnCerrarSesion" layoutX="257.0" layoutY="491.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="94.0" style="-fx-background-color: #ff3333; -fx-text-fill: white;" text="Cerrar Sesión" />
+            </children>
+        </AnchorPane>
+    </center>
+</BorderPane>

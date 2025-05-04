@@ -3,42 +3,57 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="500.0" prefWidth="450.0" style="-fx-background-color: beige;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ReservaController">
+<BorderPane prefHeight="530.0" prefWidth="512.0" style="-fx-background-color: beige;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ReservaEController">
 
     <top>
-        <ImageView fitHeight="88.0" fitWidth="407.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
-            <image>
-                <Image url="@../../../../../Desktop/Ian/ProyectoIntegrador1/resources/images/logo-udi.png" />
-            </image>
-        </ImageView>
+        <AnchorPane prefHeight="100.0" prefWidth="500.0">
+            <children>
+                <ImageView fitHeight="88.0" fitWidth="407.0" layoutX="10.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../resources/images/logo-udi.png" />
+                    </image>
+                </ImageView>
+            </children>
+        </AnchorPane>
     </top>
-   <center>
-      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="500.0" BorderPane.alignment="CENTER">
-         <children>
-               
-                  <Button fx:id="btnequipo" layoutX="125.0" layoutY="184.0" maxWidth="250" prefHeight="26.0" prefWidth="200.0" style="-fx-background-color: #0073e6; -fx-text-fill: white;" text="Reservar Equipo">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-                   
-                  <Button fx:id="btnverres" layoutX="124.0" layoutY="272.0" maxWidth="250" prefHeight="26.0" prefWidth="201.0" style="-fx-background-color: #004a99; -fx-text-fill: white;" text="Ver Reservas" textFill="#004a99">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Label layoutX="73.0" layoutY="69.0" text="GESTOR DE RESERVAS ESTUDIANTE" textFill="#121213">
+
+    <center>
+        <AnchorPane prefHeight="400.0" prefWidth="500.0" BorderPane.alignment="CENTER">
+            <children>
+                <Label layoutX="97.0" layoutY="21.0" text="GESTOR DE RESERVAS ESTUDIANTE" textFill="#121213">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+
+                <Button fx:id="btnequipo" layoutX="147.0" layoutY="70.0" maxWidth="250" prefHeight="35.0" prefWidth="204.0" style="-fx-background-color: #0073e6; -fx-text-fill: white;" text="Reservar Equipo">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+
+                <!-- Tabla de equipos registrados -->
+                <TableView fx:id="tableEquipos" layoutX="50.0" layoutY="160.0" prefHeight="200.0" prefWidth="400.0">
+                    <columns>
+                        <TableColumn fx:id="colIdEquipo" prefWidth="200.0" text="ID Equipo" />
+                        <TableColumn fx:id="colNombreEquipo" prefWidth="200.0" text="Nombre Equipo" />
+                    </columns>
+                </TableView>
+                <Button fx:id="btnCerrarSesion" layoutX="206.0" layoutY="379.0" mnemonicParsing="false" style="-fx-background-color: #ff3333; -fx-text-fill: white;" text="Cerrar Sesión" />
+            <Label layoutX="165.0" layoutY="120.0" text="Equipos Reservados" textAlignment="RIGHT" textFill="#121213">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-         </children>
-      </AnchorPane>
-   </center>
+            </children>
+        </AnchorPane>
+    </center>
 </BorderPane>
