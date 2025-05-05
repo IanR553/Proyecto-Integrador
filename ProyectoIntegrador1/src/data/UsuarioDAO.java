@@ -7,10 +7,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import model.Rol;
 import model.Usuario;
 
-public class UsuarioDAO implements CRUD_operaciones<Usuario, Integer> {
+public class UsuarioDAO implements CRUD_operaciones<Usuario, Long> {
 
     private Connection connection;
 
@@ -23,14 +22,14 @@ public class UsuarioDAO implements CRUD_operaciones<Usuario, Integer> {
         String query = "INSERT INTO Usuario (cedula, primerNombre, segundoNombre, primerApellido, segundoApellido, correoElectronico, celular, idRol) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setInt(1, usuario.getCedula());
+            pstmt.setLong(1, usuario.getCedula()); 
             pstmt.setString(2, usuario.getPrimerNombre());
             pstmt.setString(3, usuario.getSegundoNombre());
             pstmt.setString(4, usuario.getPrimerApellido());
             pstmt.setString(5, usuario.getSegundoApellido());
             pstmt.setString(6, usuario.getCorreoElectronico());
             pstmt.setInt(7, usuario.getCelular());
-            pstmt.setInt(8, usuario.getRol().getId());
+            pstmt.setString(8, usuario.getidRol()); 
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -42,24 +41,23 @@ public class UsuarioDAO implements CRUD_operaciones<Usuario, Integer> {
     public ArrayList<Usuario> fetch() {
         ArrayList<Usuario> usuarios = new ArrayList<>();
         String query = "SELECT u.cedula, u.primerNombre, u.segundoNombre, u.primerApellido, u.segundoApellido, " +
-                       "u.correoElectronico, u.celular, r.id as rol_id, r.nombre as rol_nombre " +
-                       "FROM Usuario u JOIN Rol r ON u.idRol = r.id";
+                       "u.correoElectronico, u.celular, u.idRol " +
+                       "FROM Usuario u";
 
         try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
 
             while (rs.next()) {
-                Rol rol = new Rol(rs.getInt("rol_id"), rs.getString("rol_nombre"));
-
-                int cedula = rs.getInt("cedula");
+                Long cedula = rs.getLong("cedula"); 
                 String primerNombre = rs.getString("primerNombre");
                 String segundoNombre = rs.getString("segundoNombre");
                 String primerApellido = rs.getString("primerApellido");
                 String segundoApellido = rs.getString("segundoApellido");
                 String correoElectronico = rs.getString("correoElectronico");
                 int celular = rs.getInt("celular");
-                
-                Usuario usuario = new Usuario(cedula, primerNombre, segundoNombre, primerApellido, segundoApellido, correoElectronico, celular, rol);
+                String idRol = rs.getString("idRol"); 
+
+                Usuario usuario = new Usuario(cedula, primerNombre, segundoNombre, primerApellido, segundoApellido, correoElectronico, celular, idRol);
                 usuarios.add(usuario);
             }
 
@@ -81,8 +79,8 @@ public class UsuarioDAO implements CRUD_operaciones<Usuario, Integer> {
             pstmt.setString(4, usuario.getSegundoApellido());
             pstmt.setString(5, usuario.getCorreoElectronico());
             pstmt.setInt(6, usuario.getCelular());
-            pstmt.setInt(7, usuario.getRol().getId());
-            pstmt.setInt(8, usuario.getCedula());
+            pstmt.setString(7, usuario.getidRol()); 
+            pstmt.setLong(8, usuario.getCedula()); 
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -91,11 +89,11 @@ public class UsuarioDAO implements CRUD_operaciones<Usuario, Integer> {
     }
 
     @Override
-    public void delete(Integer cedula) {
+    public void delete(Long cedula) {
         String query = "DELETE FROM Usuario WHERE cedula=?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setInt(1, cedula);
+            pstmt.setLong(1, cedula); 
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -103,20 +101,22 @@ public class UsuarioDAO implements CRUD_operaciones<Usuario, Integer> {
     }
 
     @Override
-    public boolean authenticate(Integer cedula) {
+    public boolean authenticate(Long cedula) {
         String query = "SELECT cedula FROM Usuario WHERE cedula=?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setInt(1, cedula);
+            pstmt.setLong(1, cedula); 
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
-    			return rs.getInt("cedula")==cedula;
-    			}
-    		} catch (SQLException e) {
-    		e.printStackTrace();}
-    		
-    		return false;
-    	}
+                return rs.getLong("cedula") == cedula; 
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
 }
+
 

@@ -7,10 +7,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import javafx.scene.control.Alert;
 import model.Equipo;
 
-public class EquipoDAO implements CRUD_operaciones<Equipo, Integer> {
+public class EquipoDAO implements CRUD_operaciones<Equipo, String> {
     private Connection connection;
 
     public EquipoDAO(Connection connection) {
@@ -22,7 +21,7 @@ public class EquipoDAO implements CRUD_operaciones<Equipo, Integer> {
         String query = "INSERT INTO Equipo (id, tipo, estado, marca, software) VALUES (?, ?, ?, ?, ?)";
 
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setInt(1, equipo.getId());
+            pstmt.setString(1, equipo.getId());
             pstmt.setString(2, equipo.getTipo());
             pstmt.setBoolean(3, equipo.isEstado());
             pstmt.setString(4, equipo.getMarca());
@@ -43,7 +42,7 @@ public class EquipoDAO implements CRUD_operaciones<Equipo, Integer> {
              ResultSet rs = stmt.executeQuery(query)) {
 
             while (rs.next()) {
-                int id = rs.getInt("id");
+                String id = rs.getString("id");
                 String tipo = rs.getString("tipo");
                 boolean estado = rs.getBoolean("estado");
                 String marca = rs.getString("marca");
@@ -68,7 +67,7 @@ public class EquipoDAO implements CRUD_operaciones<Equipo, Integer> {
             pstmt.setBoolean(2, equipo.isEstado());
             pstmt.setString(3, equipo.getMarca());
             pstmt.setString(4, equipo.getSoftware());
-            pstmt.setInt(5, equipo.getId());
+            pstmt.setString(5, equipo.getId());
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -77,11 +76,11 @@ public class EquipoDAO implements CRUD_operaciones<Equipo, Integer> {
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(String id) {
         String sql = "DELETE FROM Equipo WHERE id=?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, id);
+            pstmt.setString(1, id);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -89,15 +88,15 @@ public class EquipoDAO implements CRUD_operaciones<Equipo, Integer> {
     }
 
     @Override
-    public boolean authenticate(Integer id) {
+    public boolean authenticate(String id) {
         String sql = "SELECT id FROM Equipo WHERE id=?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, id);
+            pstmt.setString(1, id);
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                return rs.getInt("id") == id;
+                return rs.getString("id").equals(id);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -106,14 +105,7 @@ public class EquipoDAO implements CRUD_operaciones<Equipo, Integer> {
         return false;
     }
 
- 
-    public void showAlert(String mensaje, String header, Alert.AlertType tipoAlerta) {
-        Alert alert = new Alert(tipoAlerta);
-        alert.setTitle("Alerta");
-        alert.setHeaderText(header);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
-    }
 }
+
 
 

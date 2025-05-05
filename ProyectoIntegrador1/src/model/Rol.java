@@ -1,20 +1,20 @@
 package model;
 
 public class Rol {
-	private int id;
+	private String id;
 	private String nombre;
 	
-	public Rol(int id, String nombre) {
+	public Rol(String id, String nombre) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
 	}
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

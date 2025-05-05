@@ -7,10 +7,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import javafx.scene.control.Alert;
 import model.Sala;
 
-public class SalaDAO implements CRUD_operaciones<Sala, Integer> {
+public class SalaDAO implements CRUD_operaciones<Sala, String> { 
     private Connection connection;
 
     public SalaDAO(Connection connection) {
@@ -22,13 +21,14 @@ public class SalaDAO implements CRUD_operaciones<Sala, Integer> {
         String sql = "INSERT INTO Sala (id, nombre, capacidad, estado, ubicacion, software) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, sala.getId());
+            pstmt.setString(1, sala.getId());  
             pstmt.setString(2, sala.getNombre());
             pstmt.setInt(3, sala.getCapacidad());
             pstmt.setBoolean(4, sala.isEstado());
             pstmt.setString(5, sala.getUbicacion());
             pstmt.setString(6, sala.getSoftware());
 
+            pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -43,14 +43,14 @@ public class SalaDAO implements CRUD_operaciones<Sala, Integer> {
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                int id = rs.getInt("id");
+                String id = rs.getString("id"); 
                 String nombre = rs.getString("nombre");
                 int capacidad = rs.getInt("capacidad");
                 boolean estado = rs.getBoolean("estado");
                 String ubicacion = rs.getString("ubicacion");
                 String software = rs.getString("software");
 
-                Sala sala = new Sala(id, nombre, capacidad, estado, ubicacion, software);
+                Sala sala = new Sala(id, nombre, capacidad, estado, ubicacion, software); 
                 salas.add(sala);
             }
         } catch (SQLException e) {
@@ -70,7 +70,7 @@ public class SalaDAO implements CRUD_operaciones<Sala, Integer> {
             pstmt.setBoolean(3, sala.isEstado());
             pstmt.setString(4, sala.getUbicacion());
             pstmt.setString(5, sala.getSoftware());
-            pstmt.setInt(6, sala.getId());
+            pstmt.setString(6, sala.getId()); 
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -79,11 +79,11 @@ public class SalaDAO implements CRUD_operaciones<Sala, Integer> {
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(String id) {
         String sql = "DELETE FROM Sala WHERE id=?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, id);
+            pstmt.setString(1, id);  
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -91,15 +91,15 @@ public class SalaDAO implements CRUD_operaciones<Sala, Integer> {
     }
 
     @Override
-    public boolean authenticate(Integer id) {
+    public boolean authenticate(String id) {
         String sql = "SELECT id FROM Sala WHERE id=?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, id);
+            pstmt.setString(1, id);  
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                return rs.getInt("id") == id;
+                return rs.getString("id").equals(id);  
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -107,14 +107,7 @@ public class SalaDAO implements CRUD_operaciones<Sala, Integer> {
 
         return false;
     }
-
-    public void showAlert(String mensaje, String header, Alert.AlertType tipoAlerta) {
-        Alert alert = new Alert(tipoAlerta);
-        alert.setTitle("Alerta");
-        alert.setHeaderText(header);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
-    }
 }
+
 
 

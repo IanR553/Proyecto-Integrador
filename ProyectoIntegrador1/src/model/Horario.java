@@ -5,14 +5,14 @@ import java.util.ArrayList;
 
 public class Horario {
 	
-	private int id;
+	private String id;
 	private int semana;
 	private String dia;
 	private LocalTime horaInicio;
 	private LocalTime horaFin;
 	private ArrayList<RequerimientoSalas> tablaRequerimientos;
 	
-	public Horario(int id, int semana, String dia, LocalTime horaInicio, LocalTime horaFin,
+	public Horario(String id, int semana, String dia, LocalTime horaInicio, LocalTime horaFin,
 			ArrayList<RequerimientoSalas> tablaRequerimientos) {
 		super();
 		this.id = id;
@@ -23,11 +23,11 @@ public class Horario {
 		this.tablaRequerimientos = tablaRequerimientos;
 	}
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

@@ -1,18 +1,12 @@
 package data;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import javafx.scene.control.Alert;
 import model.Mantenimiento;
 
-public class MantenimientoDAO implements CRUD_operaciones<Mantenimiento, Integer> {
+public class MantenimientoDAO implements CRUD_operaciones<Mantenimiento, String> {
 
     private Connection connection;
 
@@ -22,10 +16,10 @@ public class MantenimientoDAO implements CRUD_operaciones<Mantenimiento, Integer
 
     @Override
     public void save(Mantenimiento mantenimiento) {
-        String sql = "INSERT INTO Mantenimiento (id, motivo, tipo, fechaInicio, fechaFinalPropuesta) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Mantenimiento (id, motivo, tipo, fechaInicio, fechaFinalPropuesta, cedUsuario) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, mantenimiento.getId());
+            pstmt.setString(1, mantenimiento.getId());
             pstmt.setString(2, mantenimiento.getMotivo());
             pstmt.setString(3, mantenimiento.getTipo());
 
@@ -35,14 +29,16 @@ public class MantenimientoDAO implements CRUD_operaciones<Mantenimiento, Integer
             if (fechaInicio != null) {
                 pstmt.setDate(4, Date.valueOf(fechaInicio));
             } else {
-                pstmt.setNull(4, java.sql.Types.DATE);
+                pstmt.setNull(4, Types.DATE);
             }
 
             if (fechaFinal != null) {
                 pstmt.setDate(5, Date.valueOf(fechaFinal));
             } else {
-                pstmt.setNull(5, java.sql.Types.DATE);
+                pstmt.setNull(5, Types.DATE);
             }
+
+            pstmt.setLong(6, mantenimiento.getCedUsuario());
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -59,7 +55,7 @@ public class MantenimientoDAO implements CRUD_operaciones<Mantenimiento, Integer
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                int id = rs.getInt("id");
+                String id = rs.getString("id");
                 String motivo = rs.getString("motivo");
                 String tipo = rs.getString("tipo");
 
@@ -69,7 +65,9 @@ public class MantenimientoDAO implements CRUD_operaciones<Mantenimiento, Integer
                 LocalDate fechaInicio = (fechaInicioSQL != null) ? fechaInicioSQL.toLocalDate() : null;
                 LocalDate fechaFinal = (fechaFinalSQL != null) ? fechaFinalSQL.toLocalDate() : null;
 
-                Mantenimiento mantenimiento = new Mantenimiento(id, motivo, tipo, fechaInicio, fechaFinal);
+                long cedUsuario = rs.getLong("cedUsuario");
+
+                Mantenimiento mantenimiento = new Mantenimiento(id, motivo, tipo, fechaInicio, fechaFinal, cedUsuario);
                 mantenimientos.add(mantenimiento);
             }
         } catch (SQLException e) {
@@ -81,7 +79,7 @@ public class MantenimientoDAO implements CRUD_operaciones<Mantenimiento, Integer
 
     @Override
     public void update(Mantenimiento mantenimiento) {
-        String sql = "UPDATE Mantenimiento SET motivo=?, tipo=?, fechaInicio=?, fechaFinalPropuesta=? WHERE id=?";
+        String sql = "UPDATE Mantenimiento SET motivo = ?, tipo = ?, fechaInicio = ?, fechaFinalPropuesta = ?, cedUsuario = ? WHERE id = ?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, mantenimiento.getMotivo());
@@ -93,16 +91,17 @@ public class MantenimientoDAO implements CRUD_operaciones<Mantenimiento, Integer
             if (fechaInicio != null) {
                 pstmt.setDate(3, Date.valueOf(fechaInicio));
             } else {
-                pstmt.setNull(3, java.sql.Types.DATE);
+                pstmt.setNull(3, Types.DATE);
             }
 
             if (fechaFinal != null) {
                 pstmt.setDate(4, Date.valueOf(fechaFinal));
             } else {
-                pstmt.setNull(4, java.sql.Types.DATE);
+                pstmt.setNull(4, Types.DATE);
             }
 
-            pstmt.setInt(5, mantenimiento.getId());
+            pstmt.setLong(5, mantenimiento.getCedUsuario());
+            pstmt.setString(6, mantenimiento.getId());
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -111,11 +110,11 @@ public class MantenimientoDAO implements CRUD_operaciones<Mantenimiento, Integer
     }
 
     @Override
-    public void delete(Integer id) {
-        String sql = "DELETE FROM Mantenimiento WHERE id=?";
+    public void delete(String id) {
+        String sql = "DELETE FROM Mantenimiento WHERE id = ?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, id);
+            pstmt.setString(1, id);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -123,30 +122,19 @@ public class MantenimientoDAO implements CRUD_operaciones<Mantenimiento, Integer
     }
 
     @Override
-    public boolean authenticate(Integer id) {
-        String sql = "SELECT id FROM Mantenimiento WHERE id=?";
+    public boolean authenticate(String id) {
+        String sql = "SELECT id FROM Mantenimiento WHERE id = ?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, id);
+            pstmt.setString(1, id);
             ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                return rs.getInt("id") == id;
-            }
+            return rs.next();
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         return false;
     }
-
-
-    public void showAlert(String mensaje, String header, Alert.AlertType tipoAlerta) {
-        Alert alert = new Alert(tipoAlerta);
-        alert.setTitle("Alerta");
-        alert.setHeaderText(header);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
-    }
 }
+
 

@@ -2,17 +2,17 @@ package model;
 
 public class Usuario {
 
-	private int cedula;
+	private Long cedula;
 	private String primerNombre;
 	private String segundoNombre;
 	private String primerApellido;
 	private String segundoApellido;
 	private String correoElectronico;
 	private int celular;
-	private Rol rol; 
+	private String idRol; 
 
-	public Usuario(int cedula, String primerNombre, String segundoNombre, String primerApellido, String segundoApellido,
-			String correoElectronico, int celular, Rol rol) {
+	public Usuario(Long cedula, String primerNombre, String segundoNombre, String primerApellido, String segundoApellido,
+			String correoElectronico, int celular, String idRol) {
 		this.cedula = cedula;
 		this.primerNombre = primerNombre;
 		this.segundoNombre = segundoNombre;
@@ -20,16 +20,16 @@ public class Usuario {
 		this.segundoApellido = segundoApellido;
 		this.correoElectronico = correoElectronico;
 		this.celular = celular;
-		this.rol = rol;
+		this.idRol = idRol;
 	}
 
 
 
-	public int getCedula() {
+	public Long getCedula() {
 		return cedula;
 	}
 
-	public void setCedula(int cedula) {
+	public void setCedula(Long cedula) {
 		this.cedula = cedula;
 	}
 
@@ -81,12 +81,12 @@ public class Usuario {
 		this.celular = celular;
 	}
 
-	public Rol getRol() {
-		return rol;
+	public String getidRol() {
+		return idRol;
 	}
 
-	public void setRol(Rol rol) {
-		this.rol = rol;
+	public void setidRol(String idRol) {
+		this.idRol = idRol;
 	}
 }
 

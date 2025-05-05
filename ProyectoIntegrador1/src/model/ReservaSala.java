@@ -1,40 +1,38 @@
 package model;
 
 public class ReservaSala {
-	
-    private int idReserva;
-    private int idSala;
-    private int idEquipo;
-    
-	public ReservaSala(int idReserva, int idSala, int idEquipo) {
-		super();
-		this.idReserva = idReserva;
-		this.idSala = idSala;
-		this.idEquipo = idEquipo;
-	}
 
-	public int getIdReserva() {
-		return idReserva;
-	}
+    private String idReserva;
+    private String idSala;
+    private String idEquipo;
 
-	public void setIdReserva(int idReserva) {
-		this.idReserva = idReserva;
-	}
+    public ReservaSala(String idReserva, String idSala, String idEquipo) {
+        this.idReserva = idReserva;
+        this.idSala = idSala;
+        this.idEquipo = idEquipo;
+    }
 
-	public int getIdSala() {
-		return idSala;
-	}
+    public String getIdReserva() {
+        return idReserva;
+    }
 
-	public void setIdSala(int idSala) {
-		this.idSala = idSala;
-	}
+    public void setIdReserva(String idReserva) {
+        this.idReserva = idReserva;
+    }
 
-	public int getIdEquipo() {
-		return idEquipo;
-	}
+    public String getIdSala() {
+        return idSala;
+    }
 
-	public void setIdEquipo(int idEquipo) {
-		this.idEquipo = idEquipo;
-	}
-    
+    public void setIdSala(String idSala) {
+        this.idSala = idSala;
+    }
+
+    public String getIdEquipo() {
+        return idEquipo;
+    }
+
+    public void setIdEquipo(String idEquipo) {
+        this.idEquipo = idEquipo;
+    }
 }

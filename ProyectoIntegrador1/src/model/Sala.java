@@ -6,7 +6,7 @@ public class Sala extends Entidad {
     private int capacidad;
     private String ubicacion;
 
-    public Sala(int id, String nombre, int capacidad, boolean estado, String ubicacion, String software) {
+    public Sala(String id, String nombre, int capacidad, boolean estado, String ubicacion, String software) {
         super(id, estado, software);
         this.nombre = nombre;
         this.capacidad = capacidad;

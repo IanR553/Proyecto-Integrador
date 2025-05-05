@@ -2,24 +2,28 @@ package model;
 
 public class EquipoMantenimiento {
 	
-	private int idMantenimiento;
-    private int idEquipo;
+	private String idMantenimiento;
+    private String idEquipo;
     
-	public EquipoMantenimiento(int idMantenimiento, int idEquipo) {
-		super();
+    
+	public EquipoMantenimiento(String idMantenimiento, String idEquipo) {
 		this.idMantenimiento = idMantenimiento;
 		this.idEquipo = idEquipo;
 	}
-	public int getIdMantenimiento() {
+	
+	public String getIdMantenimiento() {
 		return idMantenimiento;
 	}
-	public void setIdMantenimiento(int idMantenimiento) {
+	
+	public void setIdMantenimiento(String idMantenimiento) {
 		this.idMantenimiento = idMantenimiento;
 	}
-	public int getIdEquipo() {
+	
+	public String getIdEquipo() {
 		return idEquipo;
 	}
-	public void setIdEquipo(int idEquipo) {
+	
+	public void setIdEquipo(String idEquipo) {
 		this.idEquipo = idEquipo;
 	}
     

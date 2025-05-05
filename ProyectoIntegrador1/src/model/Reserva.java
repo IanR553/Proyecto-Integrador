@@ -2,58 +2,72 @@ package model;
 
 public class Reserva {
 
-    private int id;
+    private String id;
     private String estado; // "cancelada", "aprobada", "pendiente"
     private String tipo;
-    private Usuario usuario;
-    private Horario horario;
+    private long cedUsuario;
+    private String idHorario;
+    
+    
+	public Reserva(String id, String estado, String tipo, long cedUsuario, String idHorario) {
+		super();
+		this.id = id;
+		this.estado = estado;
+		this.tipo = tipo;
+		this.cedUsuario = cedUsuario;
+		this.idHorario = idHorario;
+	}
 
-    public Reserva(int id, String estado, String tipo, Usuario usuario, Horario horario) {
-        this.id = id;
-        this.estado = estado;
-        this.tipo = tipo;
-        this.usuario = usuario;
-        this.horario = horario;
-    }
 
-    public int getId() {
-        return id;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
-    public String getEstado() {
-        return estado;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
 
-    public String getTipo() {
-        return tipo;
-    }
+	public String getEstado() {
+		return estado;
+	}
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
 
-    public Usuario getUsuario() {
-        return usuario;
-    }
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
 
-    public Horario getHorario() {
-        return horario;
-    }
+	public String getTipo() {
+		return tipo;
+	}
 
-    public void setHorario(Horario horario) {
-        this.horario = horario;
-    }
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+
+
+	public long getCedUsuario() {
+		return cedUsuario;
+	}
+
+
+	public void setCedUsuario(long cedUsuario) {
+		this.cedUsuario = cedUsuario;
+	}
+
+
+	public String getIdHorario() {
+		return idHorario;
+	}
+
+
+	public void setIdHorario(String idHorario) {
+		this.idHorario = idHorario;
+	}
+
+
 }
 

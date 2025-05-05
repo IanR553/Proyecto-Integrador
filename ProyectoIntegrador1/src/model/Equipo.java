@@ -5,7 +5,7 @@ public class Equipo extends Entidad {
     private String tipo;
     private String marca;
 
-    public Equipo(int id, String tipo, boolean estado, String marca, String software) {
+    public Equipo(String id, String tipo, boolean estado, String marca, String software) {
         super(id, estado, software); 
         this.tipo = tipo;
         this.marca = marca;

@@ -7,8 +7,8 @@ import java.sql.SQLException;
 public class DBConnection {
     private static DBConnection instance; //Singleton
     private Connection connection;
-	private final String username="";
-	private final String password="";
+	private final String username="PI1SIDS";
+	private final String password="r105";
 	private final String host = "192.168.254.215";
 	private final String port = "1521";
 	private final String service = "orcl";

@@ -20,9 +20,9 @@ public class ReservaSalaDAO {
         String query = "INSERT INTO reserva_sala (id_reserva, id_sala, id_equipo) VALUES (?, ?, ?)";
 
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setInt(1, rs.getIdReserva());
-            pstmt.setInt(2, rs.getIdSala());
-            pstmt.setInt(3, rs.getIdEquipo());
+            pstmt.setString(1, rs.getIdReserva());
+            pstmt.setString(2, rs.getIdSala());
+            pstmt.setString(3, rs.getIdEquipo());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -37,9 +37,9 @@ public class ReservaSalaDAO {
              ResultSet rs = pstmt.executeQuery()) {
 
             while (rs.next()) {
-                int idReserva = rs.getInt("id_reserva");
-                int idSala = rs.getInt("id_sala");
-                int idEquipo = rs.getInt("id_equipo");
+                String idReserva = rs.getString("id_reserva");
+                String idSala = rs.getString("id_sala");
+                String idEquipo = rs.getString("id_equipo");
 
                 ReservaSala reservaSala = new ReservaSala(idReserva, idSala, idEquipo);
                 lista.add(reservaSala);
@@ -56,34 +56,35 @@ public class ReservaSalaDAO {
         String query = "UPDATE reserva_sala SET id_sala = ?, id_equipo = ? WHERE id_reserva = ?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setInt(1, rs.getIdSala());
-            pstmt.setInt(2, rs.getIdEquipo());
-            pstmt.setInt(3, rs.getIdReserva());
+            pstmt.setString(1, rs.getIdSala());
+            pstmt.setString(2, rs.getIdEquipo());
+            pstmt.setString(3, rs.getIdReserva());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void delete(int idReserva, int idSala, int idEquipo) {
+    public void delete(String idReserva, String idSala, String idEquipo) {
         String query = "DELETE FROM reserva_sala WHERE id_reserva = ? AND id_sala = ? AND id_equipo = ?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setInt(1, idReserva);
-            pstmt.setInt(2, idSala);
-            pstmt.setInt(3, idEquipo);
+            pstmt.setString(1, idReserva);
+            pstmt.setString(2, idSala);
+            pstmt.setString(3, idEquipo);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public boolean authenticate(int idReserva, int idSala, int idEquipo) {
+    public boolean authenticate(String idReserva, String idSala, String idEquipo) {
         String sql = "SELECT id_reserva, id_sala, id_equipo FROM reserva_sala WHERE id_reserva = ? AND id_sala = ? AND id_equipo = ?";
+
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, idReserva);
-            stmt.setInt(2, idSala);
-            stmt.setInt(3, idEquipo);
+            stmt.setString(1, idReserva);
+            stmt.setString(2, idSala);
+            stmt.setString(3, idEquipo);
             ResultSet rs = stmt.executeQuery();
             return rs.next();
         } catch (SQLException e) {

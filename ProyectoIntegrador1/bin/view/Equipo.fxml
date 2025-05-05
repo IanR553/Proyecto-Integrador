@@ -43,7 +43,7 @@
             <Button fx:id="btnBuscarSalas" maxWidth="250" style="-fx-background-color: #004a99; -fx-text-fill: white;" text="Buscar Equipos en salas disponibles" />
             
             <!-- Sección para mostrar salas disponibles -->
-            <Label style="-fx-font-size: 16px; -fx-text-fill: #004a99;" text="Salas Disponibles:" />
+            <Label style="-fx-font-size: 16px; -fx-text-fill: #004a99;" text="Equipo Disponibles:" />
             <TableView fx:id="tableSalasDisponibles" maxHeight="150" maxWidth="400" prefWidth="318.0">
                 <columns>
                <TableColumn fx:id="colIdSala" prefWidth="63.20001524686813" text="ID de Sala" />
@@ -55,7 +55,7 @@
             </TableView>
 
             <!-- Botón para reservar (se activará después de la búsqueda) -->
-            <Button fx:id="btnReservar" disable="true" maxWidth="250" style="-fx-background-color: #0073e6; -fx-text-fill: white;" text="Reservar Sala" /> 
+            <Button fx:id="btnReservar" disable="true" maxWidth="250" style="-fx-background-color: #0073e6; -fx-text-fill: white;" text="Reservar Equipo" /> 
         </VBox>
     </center>
 </BorderPane>

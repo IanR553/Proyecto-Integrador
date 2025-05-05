@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 import model.Horario;
 
-public class HorarioDAO implements CRUD_operaciones<Horario, Integer> {
+public class HorarioDAO implements CRUD_operaciones<Horario, String> {
 
     private Connection connection;
 
@@ -24,7 +24,7 @@ public class HorarioDAO implements CRUD_operaciones<Horario, Integer> {
         String sql = "INSERT INTO Horario (id, semana, dia, horaInicio, horaFin) VALUES (?, ?, ?, ?, ?)";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, horario.getId());
+            pstmt.setString(1, horario.getId());
             pstmt.setInt(2, horario.getSemana());
             pstmt.setString(3, horario.getDia());
             pstmt.setTime(4, Time.valueOf(horario.getHoraInicio()));
@@ -44,7 +44,7 @@ public class HorarioDAO implements CRUD_operaciones<Horario, Integer> {
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                int id = rs.getInt("id");
+                String id = rs.getString("id");
                 int semana = rs.getInt("semana");
                 String dia = rs.getString("dia");
                 LocalTime horaInicio = rs.getTime("horaInicio").toLocalTime();
@@ -69,7 +69,7 @@ public class HorarioDAO implements CRUD_operaciones<Horario, Integer> {
             pstmt.setString(2, horario.getDia());
             pstmt.setTime(3, Time.valueOf(horario.getHoraInicio()));
             pstmt.setTime(4, Time.valueOf(horario.getHoraFin()));
-            pstmt.setInt(5, horario.getId());
+            pstmt.setString(5, horario.getId());
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -78,11 +78,11 @@ public class HorarioDAO implements CRUD_operaciones<Horario, Integer> {
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(String id) {
         String sql = "DELETE FROM Horario WHERE id=?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, id);
+            pstmt.setString(1, id);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -90,16 +90,14 @@ public class HorarioDAO implements CRUD_operaciones<Horario, Integer> {
     }
 
     @Override
-    public boolean authenticate(Integer id) {
+    public boolean authenticate(String id) {
         String sql = "SELECT id FROM Horario WHERE id=?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, id);
+            pstmt.setString(1, id);
             ResultSet rs = pstmt.executeQuery();
 
-            if (rs.next()) {
-                return rs.getInt("id") == id;
-            }
+            return rs.next();
         } catch (SQLException e) {
             e.printStackTrace();
         }
