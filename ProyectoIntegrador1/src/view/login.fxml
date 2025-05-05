@@ -9,16 +9,16 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="400.0" prefWidth="407.0" style="-fx-background-color: beige;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.loginController">
+<BorderPane prefHeight="406.0" prefWidth="419.0" style="-fx-background-color: beige;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.loginController">
     <center>
         <VBox alignment="CENTER" maxHeight="300" maxWidth="400" spacing="15">
          <Label style="-fx-font-size: 20px; -fx-text-fill: #004a99;" text="Bienvenido" />
             <Label style="-fx-font-size: 20px; -fx-text-fill: #004a99;" text="Iniciar Sesión" />
             
-            <TextField fx:id="txtUsuario" maxWidth="250" promptText="Usuario" />
+            <TextField fx:id="txtUsuario" maxWidth="250" promptText="Cedula" />
             <PasswordField fx:id="txtPassword" maxWidth="250" promptText="Contraseña" />
             
-            <Button fx:id="btnLogin" maxWidth="250" style="-fx-background-color: #004a99; -fx-text-fill: white;" text="Iniciar Sesión" />
+            <Button fx:id="btnLogin" maxWidth="250" onAction="#iniciarSesion" style="-fx-background-color: #004a99; -fx-text-fill: white;" text="Iniciar Sesión" />
         </VBox>
     </center>
    <top>

@@ -117,6 +117,23 @@ public class UsuarioDAO implements CRUD_operaciones<Usuario, Long> {
 
         return false;
     }
+    
+    public boolean authenticateLogin(Long cedula, String password) {
+        String query = "SELECT * FROM Usuario WHERE cedula = ? AND contraseña = ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setLong(1, cedula);
+            pstmt.setString(2, password);
+            ResultSet rs = pstmt.executeQuery();
+
+            return rs.next(); 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+    
 }
 
 
