@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 
@@ -46,6 +47,15 @@ public class Main extends Application {
 		}
 
 		}
+	
+    public static void showAlert(String mensaje, String header, Alert.AlertType tipoAlerta) {
+        Alert alert = new Alert(tipoAlerta);
+        alert.setTitle("Alerta");
+        alert.setHeaderText(header);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
+    
 	public static void main(String[] args) {
 		launch(args);
 	}

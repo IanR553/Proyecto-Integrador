@@ -10,6 +10,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import model.Usuario;
 
 public class loginController {
 
@@ -25,43 +26,49 @@ public class loginController {
     private final Connection connection = DBConnection.getInstance().getConnection();
     private final UsuarioDAO usuarioDAO = new UsuarioDAO(connection);
 
-
     @FXML
     private void iniciarSesion() {
         String cedulaStr = txtUsuario.getText();
         String password = txtPassword.getText();
 
         if (cedulaStr.isEmpty() || password.isEmpty()) {
-            showAlert("Debe llenar todos los campos.", null, Alert.AlertType.WARNING);
+        	Main.showAlert("Debe llenar todos los campos.", null, Alert.AlertType.WARNING);
             return;
         }
 
         try {
             Long cedula = Long.parseLong(cedulaStr);
 
-            boolean autenticado = usuarioDAO.authenticateLogin(cedula, password);
+            Usuario usuario = usuarioDAO.obtenerUsuarioPorCredenciales(cedula, password);
 
-            if (autenticado) {
-                showAlert("Inicio de sesión exitoso.", null, Alert.AlertType.INFORMATION);
+            if (usuario != null) {
+                String idRol = usuario.getidRol();
+                switch (idRol) {
+                    case "R1":
+                        Main.loadView("/view/Admin.fxml");
+                        break;
+                    case "R2":
+                    case "R3":
+                        Main.loadView("/view/reservaU.fxml");
+                        break;
+                    case "R4":
+                        Main.loadView("/view/ReservaE.fxml");
+                        break;
+                    default:
+                    	Main.showAlert("Rol no reconocido. Contacte al administrador.", null, Alert.AlertType.ERROR);
+                        return;
+                }
+                Main.showAlert("Inicio de sesión exitoso.", null, Alert.AlertType.INFORMATION);
                 clearFields();
-                Main.loadView("/view/Admin.fxml");
             } else {
-                showAlert("Credenciales incorrectas.", null, Alert.AlertType.ERROR);
+            	Main.showAlert("Credenciales incorrectas.", null, Alert.AlertType.ERROR);
             }
 
         } catch (NumberFormatException e) {
-            showAlert("La cédula debe ser un número válido.", null, Alert.AlertType.WARNING);
+        	Main.showAlert("La cédula debe ser un número válido.", null, Alert.AlertType.WARNING);
         } catch (Exception e) {
-            showAlert("Error al intentar iniciar sesión: " + e.getMessage(), null, Alert.AlertType.ERROR);
+            Main.showAlert("Error al intentar iniciar sesión: " + e.getMessage(), null, Alert.AlertType.ERROR);
         }
-    }
-
-    private void showAlert(String mensaje, String header, Alert.AlertType tipoAlerta) {
-        Alert alert = new Alert(tipoAlerta);
-        alert.setTitle("Alerta");
-        alert.setHeaderText(header);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
     }
 
     @FXML
@@ -70,3 +77,4 @@ public class loginController {
         txtPassword.clear();
     }
 }
+

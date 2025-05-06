@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="461.0" prefWidth="521.0" style="-fx-background-color: beige;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminController">
+<BorderPane prefHeight="508.0" prefWidth="493.0" style="-fx-background-color: beige;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminController">
 
     <top>
         <ImageView fitHeight="88.0" fitWidth="407.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
@@ -18,41 +18,58 @@
             </image>
         </ImageView>
     </top>
-   <center>
-      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="500.0" BorderPane.alignment="CENTER">
-         <children>
-            <Button fx:id="btnReservaSala1" layoutX="25.0" layoutY="126.0" maxWidth="250" prefHeight="42.0" prefWidth="200.0" style="-fx-background-color: #0073e6; -fx-text-fill: white;" text="Reservar Sala">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-                   
-                  <Button fx:id="btnReservaEquipo" layoutX="124.0" layoutY="280.0" maxWidth="250" prefHeight="44.0" prefWidth="221.0" style="-fx-background-color: #004a99; -fx-text-fill: white;" text="Reservar Mantenimiento" textFill="#004a99">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Label layoutX="155.0" layoutY="53.0" text="GESTOR DE RESERVAS" textFill="#121213">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </Label>
-            <Button fx:id="btnReservaSala11" layoutX="264.0" layoutY="126.0" maxWidth="250" prefHeight="42.0" prefWidth="200.0" style="-fx-background-color: #0073e6; -fx-text-fill: white;" text="Reservar Equipo">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Button fx:id="btnReservaSala12" layoutX="24.0" layoutY="211.0" maxWidth="250" prefHeight="42.0" prefWidth="200.0" style="-fx-background-color: #0073e6; -fx-text-fill: white;" text="Gestionar Reservas">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Button fx:id="btnReservaSala121" layoutX="264.0" layoutY="211.0" maxWidth="250" prefHeight="42.0" prefWidth="200.0" style="-fx-background-color: #0073e6; -fx-text-fill: white;" text="Crear Usuario">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-         </children>
-      </AnchorPane>
-   </center>
+
+    <center>
+        <AnchorPane prefHeight="600.0" prefWidth="500.0" BorderPane.alignment="CENTER">
+            <children>
+                <Label layoutX="155.0" layoutY="53.0" text="Gestion de Operaciones" textFill="#121213">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+
+                <Button fx:id="btnGestionSala" layoutX="25.0" layoutY="126.0" onAction="#actionGestionarSalas" prefHeight="42.0" prefWidth="200.0" style="-fx-background-color: #0073e6; -fx-text-fill: white;" text="Gestionar Salas">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+
+                <Button fx:id="btnGestionEquipo" layoutX="264.0" layoutY="126.0" onAction="#actionGestionEquipo" prefHeight="42.0" prefWidth="200.0" style="-fx-background-color: #0073e6; -fx-text-fill: white;" text="Gestionar Equipos">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+
+                <Button fx:id="btnGestionarRes" layoutX="24.0" layoutY="211.0" onAction="#actionGestionarReservas" prefHeight="42.0" prefWidth="200.0" style="-fx-background-color: #0073e6; -fx-text-fill: white;" text="Gestionar Reservas">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+
+                <Button fx:id="btnGestionUsuario" layoutX="264.0" layoutY="211.0" onAction="#actionGestionUsuarios" prefHeight="42.0" prefWidth="200.0" style="-fx-background-color: #0073e6; -fx-text-fill: white;" text="Gestionar Usuarios">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+
+                <Button fx:id="btnGestionRoles" layoutX="24.0" layoutY="280.0" onAction="#actionGestionRoles" prefHeight="42.0" prefWidth="200.0" style="-fx-background-color: #0073e6; -fx-text-fill: white;" text="Gestionar Roles">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+
+                <Button fx:id="btnGestionarMant" layoutX="264.0" layoutY="280.0" onAction="#actionGestionarMant" prefHeight="42.0" prefWidth="200.0" style="-fx-background-color: #0073e6; -fx-text-fill: white;" text="Gestionar Mantenimientos">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+
+                <Button fx:id="btnCerrarSesion" layoutX="147.0" layoutY="359.0" onAction="#cerrarSesion" prefHeight="42.0" prefWidth="200.0" style="-fx-background-color: #e60000; -fx-text-fill: white;" text="Cerrar Sesión">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+            </children>
+        </AnchorPane>
+    </center>
 </BorderPane>

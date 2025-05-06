@@ -134,6 +134,33 @@ public class UsuarioDAO implements CRUD_operaciones<Usuario, Long> {
         return false;
     }
     
+    public Usuario obtenerUsuarioPorCredenciales(Long cedula, String password) {
+        String query = "SELECT * FROM Usuario WHERE cedula = ? AND contraseña = ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setLong(1, cedula);
+            pstmt.setString(2, password);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                String primerNombre = rs.getString("primerNombre");
+                String segundoNombre = rs.getString("segundoNombre");
+                String primerApellido = rs.getString("primerApellido");
+                String segundoApellido = rs.getString("segundoApellido");
+                String correoElectronico = rs.getString("correoElectronico");
+                int celular = rs.getInt("celular");
+                String idRol = rs.getString("idRol");
+
+                return new Usuario(cedula, primerNombre, segundoNombre, primerApellido, segundoApellido, correoElectronico, celular, idRol);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    
 }
 
 
