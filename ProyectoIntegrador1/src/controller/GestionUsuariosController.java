@@ -34,8 +34,8 @@ public class GestionUsuariosController {
     @FXML private Button btnEliminar;
     @FXML private Button btnVolverMenu;
 
-    private final Connection connection = DBConnection.getInstance().getConnection();
-    private final UsuarioDAO usuarioDAO = new UsuarioDAO(connection);
+    private Connection connection = DBConnection.getInstance().getConnection();
+    private UsuarioDAO usuarioDAO = new UsuarioDAO(connection);
     private ObservableList<Usuario> listaUsuarios;
 
     @FXML
