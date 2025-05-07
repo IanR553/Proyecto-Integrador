@@ -19,7 +19,7 @@ public class UsuarioDAO implements CRUD_operaciones<Usuario, Long> {
 
     @Override
     public void save(Usuario usuario) {
-        String query = "INSERT INTO Usuario (cedula, primerNombre, segundoNombre, primerApellido, segundoApellido, correoElectronico, celular, idRol) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Usuario (cedula, primerNombre, segundoNombre, primerApellido, segundoApellido, correoElectronico, celular, idRol, contraseña) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setLong(1, usuario.getCedula()); 
@@ -28,9 +28,10 @@ public class UsuarioDAO implements CRUD_operaciones<Usuario, Long> {
             pstmt.setString(4, usuario.getPrimerApellido());
             pstmt.setString(5, usuario.getSegundoApellido());
             pstmt.setString(6, usuario.getCorreoElectronico());
-            pstmt.setInt(7, usuario.getCelular());
+            pstmt.setLong(7, usuario.getCelular());
             pstmt.setString(8, usuario.getidRol()); 
-
+            pstmt.setString(9, usuario.getContraseña()); 
+            
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -41,7 +42,7 @@ public class UsuarioDAO implements CRUD_operaciones<Usuario, Long> {
     public ArrayList<Usuario> fetch() {
         ArrayList<Usuario> usuarios = new ArrayList<>();
         String query = "SELECT u.cedula, u.primerNombre, u.segundoNombre, u.primerApellido, u.segundoApellido, " +
-                       "u.correoElectronico, u.celular, u.idRol " +
+                       "u.correoElectronico, u.celular, u.idRol, u.contraseña " +
                        "FROM Usuario u";
 
         try (Statement stmt = connection.createStatement();
@@ -54,10 +55,11 @@ public class UsuarioDAO implements CRUD_operaciones<Usuario, Long> {
                 String primerApellido = rs.getString("primerApellido");
                 String segundoApellido = rs.getString("segundoApellido");
                 String correoElectronico = rs.getString("correoElectronico");
-                int celular = rs.getInt("celular");
+                Long celular = rs.getLong("celular");
                 String idRol = rs.getString("idRol"); 
+                String contraseña = rs.getString("contraseña"); 
 
-                Usuario usuario = new Usuario(cedula, primerNombre, segundoNombre, primerApellido, segundoApellido, correoElectronico, celular, idRol);
+                Usuario usuario = new Usuario(cedula, primerNombre, segundoNombre, primerApellido, segundoApellido, correoElectronico, celular, idRol, contraseña);
                 usuarios.add(usuario);
             }
 
@@ -70,7 +72,7 @@ public class UsuarioDAO implements CRUD_operaciones<Usuario, Long> {
 
     @Override
     public void update(Usuario usuario) {
-        String query = "UPDATE Usuario SET primerNombre=?, segundoNombre=?, primerApellido=?, segundoApellido=?, correoElectronico=?, celular=?, idRol=? WHERE cedula=?";
+        String query = "UPDATE Usuario SET primerNombre=?, segundoNombre=?, primerApellido=?, segundoApellido=?, correoElectronico=?, celular=?, idRol=?, contraseña=? WHERE cedula=?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setString(1, usuario.getPrimerNombre());
@@ -78,9 +80,12 @@ public class UsuarioDAO implements CRUD_operaciones<Usuario, Long> {
             pstmt.setString(3, usuario.getPrimerApellido());
             pstmt.setString(4, usuario.getSegundoApellido());
             pstmt.setString(5, usuario.getCorreoElectronico());
-            pstmt.setInt(6, usuario.getCelular());
+            pstmt.setLong(6, usuario.getCelular());
             pstmt.setString(7, usuario.getidRol()); 
-            pstmt.setLong(8, usuario.getCedula()); 
+            pstmt.setString(8, usuario.getContraseña());
+            pstmt.setLong(9, usuario.getCedula());
+
+            
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -148,10 +153,11 @@ public class UsuarioDAO implements CRUD_operaciones<Usuario, Long> {
                 String primerApellido = rs.getString("primerApellido");
                 String segundoApellido = rs.getString("segundoApellido");
                 String correoElectronico = rs.getString("correoElectronico");
-                int celular = rs.getInt("celular");
+                Long celular = rs.getLong("celular");
                 String idRol = rs.getString("idRol");
+                String contraseña = rs.getString("contraseña");
 
-                return new Usuario(cedula, primerNombre, segundoNombre, primerApellido, segundoApellido, correoElectronico, celular, idRol);
+                return new Usuario(cedula, primerNombre, segundoNombre, primerApellido, segundoApellido, correoElectronico, celular, idRol, contraseña);
             }
         } catch (SQLException e) {
             e.printStackTrace();

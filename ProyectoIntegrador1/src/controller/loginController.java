@@ -23,8 +23,8 @@ public class loginController {
     @FXML
     private Button btnLogin;
 
-    private final Connection connection = DBConnection.getInstance().getConnection();
-    private final UsuarioDAO usuarioDAO = new UsuarioDAO(connection);
+    private Connection connection = DBConnection.getInstance().getConnection();
+    private UsuarioDAO usuarioDAO = new UsuarioDAO(connection);
 
     @FXML
     private void iniciarSesion() {

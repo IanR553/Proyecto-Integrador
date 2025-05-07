@@ -8,11 +8,12 @@ public class Usuario {
 	private String primerApellido;
 	private String segundoApellido;
 	private String correoElectronico;
-	private int celular;
-	private String idRol; 
+	private Long celular;
+	private String idRol;
+	private String contraseña;
 
 	public Usuario(Long cedula, String primerNombre, String segundoNombre, String primerApellido, String segundoApellido,
-			String correoElectronico, int celular, String idRol) {
+			String correoElectronico, Long celular, String idRol, String contraseña) {
 		this.cedula = cedula;
 		this.primerNombre = primerNombre;
 		this.segundoNombre = segundoNombre;
@@ -21,6 +22,18 @@ public class Usuario {
 		this.correoElectronico = correoElectronico;
 		this.celular = celular;
 		this.idRol = idRol;
+		this.contraseña = contraseña;
+	}
+
+
+	public String getContraseña() {
+		return contraseña;
+	}
+
+
+
+	public void setContraseña(String contraseña) {
+		this.contraseña = contraseña;
 	}
 
 
@@ -73,11 +86,11 @@ public class Usuario {
 		this.correoElectronico = correoElectronico;
 	}
 
-	public int getCelular() {
+	public Long getCelular() {
 		return celular;
 	}
 
-	public void setCelular(int celular) {
+	public void setCelular(Long celular) {
 		this.celular = celular;
 	}
 
