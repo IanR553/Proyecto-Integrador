@@ -123,6 +123,10 @@ public class GestionUsuariosController {
             Main.showAlert("Ya existe un usuario con esa cédula.", "Validación", Alert.AlertType.ERROR);
             return;
         }
+        if (contraseña.isEmpty()) {
+            Main.showAlert("La contraseña no puede estar vacía.", "Validación", Alert.AlertType.WARNING);
+            return;
+        }
 
         Usuario nuevo = new Usuario(cedula, primerNombre, segundoNombre, primerApellido, segundoApellido, correo, celular, idRol, contraseña);
         usuarioDAO.save(nuevo);
@@ -135,19 +139,18 @@ public class GestionUsuariosController {
     @FXML
     private void actionActualizarUsuario() {
         String cedulaStr = txtCedula.getText().trim();
-        String primerNombre = txtPrimerNombre.getText().trim();
-        String segundoNombre = txtSegundoNombre.getText().trim().isEmpty() ? null : txtSegundoNombre.getText().trim();
-        String primerApellido = txtPrimerApellido.getText().trim();
-        String segundoApellido = txtSegundoApellido.getText().trim().isEmpty() ? null : txtSegundoApellido.getText().trim();
-        String correo = txtCorreo.getText().trim();
-        String celularStr = txtCelular.getText().trim();
-        String idRol = txtIdRol.getText().trim();
-        String contraseña = txtContraseña.getText().trim();
+        String primerNombre = txtPrimerNombre.getText() != null ? txtPrimerNombre.getText().trim() : "";
+        String segundoNombre = txtSegundoNombre.getText() != null && !txtSegundoNombre.getText().trim().isEmpty() ? txtSegundoNombre.getText().trim() : null;
+        String primerApellido = txtPrimerApellido.getText() != null ? txtPrimerApellido.getText().trim() : "";
+        String segundoApellido = txtSegundoApellido.getText() != null && !txtSegundoApellido.getText().trim().isEmpty() ? txtSegundoApellido.getText().trim() : null;
+        String correo = txtCorreo.getText() != null ? txtCorreo.getText().trim() : "";
+        String celularStr = txtCelular.getText() != null ? txtCelular.getText().trim() : "";
+        String idRol = txtIdRol.getText() != null ? txtIdRol.getText().trim() : "";
+        String contraseña = txtContraseña.getText() != null ? txtContraseña.getText().trim() : "";
 
         // Validación de campos vacíos
         if (cedulaStr.isEmpty() || primerNombre.isEmpty() ||
-            primerApellido.isEmpty() || 
-            correo.isEmpty() || celularStr.isEmpty() || idRol.isEmpty()) {
+            primerApellido.isEmpty() || correo.isEmpty() || celularStr.isEmpty() || idRol.isEmpty()) {
             Main.showAlert("Todos los campos deben estar llenos para actualizar el usuario.", "Validación", Alert.AlertType.WARNING);
             return;
         }
@@ -179,6 +182,10 @@ public class GestionUsuariosController {
             Main.showAlert("El ID de Rol debe ser R1, R2, R3 o R4.", "Validación", Alert.AlertType.ERROR);
             return;
         }
+        if (contraseña.isEmpty()) {
+            Main.showAlert("La contraseña no puede estar vacía.", "Validación", Alert.AlertType.WARNING);
+            return;
+        }
 
         Usuario actualizado = new Usuario(cedula, primerNombre, segundoNombre, primerApellido, segundoApellido, correo, celular, idRol, contraseña);
         usuarioDAO.update(actualizado);
@@ -186,6 +193,7 @@ public class GestionUsuariosController {
         limpiarCampos();
         Main.showAlert("Usuario actualizado exitosamente.", "Gestión de Usuarios", Alert.AlertType.INFORMATION);
     }
+
 
 
     @FXML
