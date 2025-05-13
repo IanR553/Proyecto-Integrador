@@ -47,7 +47,7 @@ public class Main extends Application {
 		}
 
 		}
-	//Hola IAN
+
 	
     public static void showAlert(String mensaje, String header, Alert.AlertType tipoAlerta) {
         Alert alert = new Alert(tipoAlerta);
