@@ -52,13 +52,7 @@
                     </cursor>
                 </Button>
 
-                <Button fx:id="btnGestionRoles" layoutX="24.0" layoutY="280.0" onAction="#actionGestionRoles" prefHeight="42.0" prefWidth="200.0" style="-fx-background-color: #0073e6; -fx-text-fill: white;" text="Gestionar Roles">
-                    <cursor>
-                        <Cursor fx:constant="HAND" />
-                    </cursor>
-                </Button>
-
-                <Button fx:id="btnGestionarMant" layoutX="264.0" layoutY="280.0" onAction="#actionGestionarMant" prefHeight="42.0" prefWidth="200.0" style="-fx-background-color: #0073e6; -fx-text-fill: white;" text="Gestionar Mantenimientos">
+                <Button fx:id="btnGestionarMant" layoutX="147.0" layoutY="285.0" onAction="#actionGestionarMant" prefHeight="42.0" prefWidth="200.0" style="-fx-background-color: #0073e6; -fx-text-fill: white;" text="Gestionar Mantenimientos">
                     <cursor>
                         <Cursor fx:constant="HAND" />
                     </cursor>

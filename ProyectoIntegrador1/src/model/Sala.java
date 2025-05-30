@@ -13,7 +13,14 @@ public class Sala extends Entidad {
         this.ubicacion = ubicacion;
     }
 
-    public String getNombre() {
+    public Sala(String nombre, int capacidad, boolean estado, String ubicacion, String software) {
+		super(null, estado, software);
+		this.nombre = nombre;
+		this.capacidad = capacidad;
+		this.ubicacion = ubicacion;
+	}
+
+	public String getNombre() {
         return nombre;
     }
 

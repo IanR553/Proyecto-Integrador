@@ -7,6 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import model.Rol;
 import model.Usuario;
 
 import java.sql.Connection;
@@ -27,7 +28,7 @@ public class GestionUsuariosController {
     @FXML private TextField txtSegundoApellido;
     @FXML private TextField txtCorreo;
     @FXML private TextField txtCelular;
-    @FXML private TextField txtIdRol;
+    @FXML private ComboBox<Rol> comBoxRol;
     @FXML private PasswordField txtContraseña;
 
     @FXML private Button btnCrear;
@@ -41,6 +42,31 @@ public class GestionUsuariosController {
 
     @FXML
     private void initialize() {
+    	
+        comBoxRol.getItems().addAll(
+                new Rol("R1", "Admin"),
+                new Rol("R2", "Profesor"),
+                new Rol("R3", "Administrativo"),
+                new Rol("R4", "Estudiante")
+            );
+
+            // Mostrar solo el nombre del rol en el ComboBox
+            comBoxRol.setCellFactory(param -> new ListCell<>() {
+                @Override
+                protected void updateItem(Rol item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setText(empty || item == null ? null : item.getNombre());
+                }
+            });
+            comBoxRol.setButtonCell(new ListCell<>() {
+                @Override
+                protected void updateItem(Rol item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setText(empty || item == null ? null : item.getNombre());
+                }
+            });
+
+
         colCedula.setCellValueFactory(data -> new javafx.beans.property.SimpleLongProperty(data.getValue().getCedula()).asObject());
         colNombre.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getPrimerNombre()));
         colApellido.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getPrimerApellido()));
@@ -58,9 +84,16 @@ public class GestionUsuariosController {
                 txtSegundoApellido.setText(newSelection.getSegundoApellido());
                 txtCorreo.setText(newSelection.getCorreoElectronico());
                 txtCelular.setText(String.valueOf(newSelection.getCelular()));
-                txtIdRol.setText(newSelection.getidRol());
                 txtContraseña.setText(newSelection.getContraseña());
                 txtCedula.setDisable(true);
+                
+                for (Rol rol : comBoxRol.getItems()) {
+                    if (rol.getId().equals(newSelection.getidRol())) {
+                        comBoxRol.setValue(rol);
+                        break;
+                    }
+                }
+
             }
         });
     }
@@ -79,13 +112,13 @@ public class GestionUsuariosController {
         String segundoApellido = txtSegundoApellido.getText().trim().isEmpty() ? null : txtSegundoApellido.getText().trim();
         String correo = txtCorreo.getText().trim();
         String celularStr = txtCelular.getText().trim();
-        String idRol = txtIdRol.getText().trim();
         String contraseña = txtContraseña.getText().trim();
+        Rol rolSeleccionado = comBoxRol.getValue();
         
         // Validación de campos vacíos
         if (cedulaStr.isEmpty() || primerNombre.isEmpty() ||
             primerApellido.isEmpty() ||
-            correo.isEmpty() || celularStr.isEmpty() || idRol.isEmpty()) {
+            correo.isEmpty() || celularStr.isEmpty() || rolSeleccionado == null) {
             Main.showAlert("Todos los campos deben estar llenos.", "Validación", Alert.AlertType.WARNING);
             return;
         }
@@ -112,12 +145,6 @@ public class GestionUsuariosController {
 
         Long celular = Long.parseLong(celularStr);
 
-        // Validar que el rol sea uno de los permitidos
-        if (!idRol.matches("R[1-4]")) {
-            Main.showAlert("El ID de Rol debe ser R1, R2, R3 o R4.", "Validación", Alert.AlertType.ERROR);
-            return;
-        }
-
         // Verificar que no exista la cédula
         if (usuarioDAO.authenticate(cedula)) {
             Main.showAlert("Ya existe un usuario con esa cédula.", "Validación", Alert.AlertType.ERROR);
@@ -128,7 +155,7 @@ public class GestionUsuariosController {
             return;
         }
 
-        Usuario nuevo = new Usuario(cedula, primerNombre, segundoNombre, primerApellido, segundoApellido, correo, celular, idRol, contraseña);
+        Usuario nuevo = new Usuario(cedula, primerNombre, segundoNombre, primerApellido, segundoApellido, correo, celular, rolSeleccionado.getId(), contraseña);
         usuarioDAO.save(nuevo);
         cargarUsuarios();
         limpiarCampos();
@@ -145,12 +172,12 @@ public class GestionUsuariosController {
         String segundoApellido = txtSegundoApellido.getText() != null && !txtSegundoApellido.getText().trim().isEmpty() ? txtSegundoApellido.getText().trim() : null;
         String correo = txtCorreo.getText() != null ? txtCorreo.getText().trim() : "";
         String celularStr = txtCelular.getText() != null ? txtCelular.getText().trim() : "";
-        String idRol = txtIdRol.getText() != null ? txtIdRol.getText().trim() : "";
         String contraseña = txtContraseña.getText() != null ? txtContraseña.getText().trim() : "";
-
+        Rol rolSeleccionado = comBoxRol.getValue();
+        
         // Validación de campos vacíos
         if (cedulaStr.isEmpty() || primerNombre.isEmpty() ||
-            primerApellido.isEmpty() || correo.isEmpty() || celularStr.isEmpty() || idRol.isEmpty()) {
+            primerApellido.isEmpty() || correo.isEmpty() || celularStr.isEmpty() || rolSeleccionado == null) {
             Main.showAlert("Todos los campos deben estar llenos para actualizar el usuario.", "Validación", Alert.AlertType.WARNING);
             return;
         }
@@ -177,17 +204,12 @@ public class GestionUsuariosController {
 
         Long celular = Long.parseLong(celularStr);
 
-        // Validar que el rol sea uno de los permitidos
-        if (!idRol.matches("R[1-4]")) {
-            Main.showAlert("El ID de Rol debe ser R1, R2, R3 o R4.", "Validación", Alert.AlertType.ERROR);
-            return;
-        }
         if (contraseña.isEmpty()) {
             Main.showAlert("La contraseña no puede estar vacía.", "Validación", Alert.AlertType.WARNING);
             return;
         }
 
-        Usuario actualizado = new Usuario(cedula, primerNombre, segundoNombre, primerApellido, segundoApellido, correo, celular, idRol, contraseña);
+        Usuario actualizado = new Usuario(cedula, primerNombre, segundoNombre, primerApellido, segundoApellido, correo, celular, rolSeleccionado.getId(), contraseña);
         usuarioDAO.update(actualizado);
         cargarUsuarios();
         limpiarCampos();
@@ -230,7 +252,7 @@ public class GestionUsuariosController {
         txtSegundoApellido.clear();
         txtCorreo.clear();
         txtCelular.clear();
-        txtIdRol.clear();
+        comBoxRol.setValue(null);
         txtContraseña.clear();
         txtCedula.setDisable(false);
         tableUsuarios.getSelectionModel().clearSelection();

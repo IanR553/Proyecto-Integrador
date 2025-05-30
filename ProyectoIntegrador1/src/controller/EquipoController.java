@@ -3,12 +3,11 @@ package controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 
-public class SalaController {
+public class EquipoController {
 
     @FXML
     private Button btnBuscarSalas;
@@ -17,16 +16,10 @@ public class SalaController {
     private Button btnReservar;
 
     @FXML
-    private Button btnVolverMenu;
+    private ComboBox<?> cbxEquipos;
 
     @FXML
-    private ComboBox<?> cmbCapacidad;
-
-    @FXML
-    private ComboBox<?> cmbEquipos;
-
-    @FXML
-    private ComboBox<?> cmbSoftware;
+    private ComboBox<?> cbxSoftware;
 
     @FXML
     private TableColumn<?, ?> colCapacidadSala;
@@ -38,10 +31,7 @@ public class SalaController {
     private TableColumn<?, ?> colNombreSala;
 
     @FXML
-    private TableColumn<?, ?> colSoftwareSala;
-
-    @FXML
-    private DatePicker dpFecha;
+    private TableColumn<?, ?> colUbicacionSala;
 
     @FXML
     private TableView<?> tableSalasDisponibles;
@@ -53,4 +43,3 @@ public class SalaController {
     private TextField txtHoraInicio;
 
 }
-

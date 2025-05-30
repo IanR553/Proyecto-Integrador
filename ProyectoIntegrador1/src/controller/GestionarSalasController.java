@@ -13,11 +13,10 @@ import java.sql.Connection;
 
 public class GestionarSalasController {
 
-    @FXML private TextField txtId;
     @FXML private TextField txtNombre;
     @FXML private TextField txtCapacidad;
     @FXML private CheckBox chkEstado;
-    @FXML private TextField txtUbicacion;
+    @FXML private ComboBox<String> comBoxUbicacion;
     @FXML private TextField txtSoftware;
 
     @FXML private TableView<Sala> tableSalas;
@@ -34,6 +33,7 @@ public class GestionarSalasController {
 
     @FXML
     public void initialize() {
+        comBoxUbicacion.getItems().addAll("Edificio Ernesto Sabato", "Edificio Daniel Bernoulli", "Edificio Jorge Luis Borges", "Edificio Simón Bolivar", "Edificio Enrico Fermi", "Edificio Carlos Lleras Restrepo");
         colId.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getId()));
         colNombre.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getNombre()));
         colEstado.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().isEstado() ? "Disponible" : "No disponible"));
@@ -54,11 +54,10 @@ public class GestionarSalasController {
     }
 
     private void mostrarDatosSala(Sala sala) {
-        txtId.setText(sala.getId());
         txtNombre.setText(sala.getNombre());
         chkEstado.setSelected(sala.isEstado());
         txtCapacidad.setText(String.valueOf(sala.getCapacidad()));
-        txtUbicacion.setText(sala.getUbicacion());
+        comBoxUbicacion.setValue(sala.getUbicacion());
         txtSoftware.setText(sala.getSoftware());
     }
 
@@ -66,37 +65,51 @@ public class GestionarSalasController {
     private void actionCrearSala() {
         if (!validarCampos()) return;
 
-        Sala sala = new Sala(
-                txtId.getText().trim(),
-                txtNombre.getText().trim(),
-                Integer.parseInt(txtCapacidad.getText().trim()),
-                chkEstado.isSelected(),
-                txtUbicacion.getText().trim(),
-                txtSoftware.getText().trim()
-        );
+        try {
+            Sala sala = new Sala(
+                    txtNombre.getText().trim(),
+                    Integer.parseInt(txtCapacidad.getText().trim()),
+                    chkEstado.isSelected(),
+                    comBoxUbicacion.getValue(),
+                    txtSoftware.getText().trim()
+            );
 
-        salaDAO.save(sala);
-        cargarSalas();
-        limpiarCampos();
+            salaDAO.save(sala);
+            cargarSalas();
+            limpiarCampos();
+        } catch (NumberFormatException e) {
+            Main.showAlert("Capacidad debe ser un número entero válido.", "Error de formato", Alert.AlertType.ERROR);
+        }
     }
 
     @FXML
     private void actionActualizarSala() {
         if (!validarCampos()) return;
 
-        Sala sala = new Sala(
-                txtId.getText().trim(),
-                txtNombre.getText().trim(),
-                Integer.parseInt(txtCapacidad.getText().trim()),
-                chkEstado.isSelected(),
-                txtUbicacion.getText().trim(),
-                txtSoftware.getText().trim()
-        );
+        Sala seleccionada = tableSalas.getSelectionModel().getSelectedItem();
+        if (seleccionada == null) {
+            Main.showAlert("Debe seleccionar una sala para actualizar.", "Sin selección", Alert.AlertType.WARNING);
+            return;
+        }
 
-        salaDAO.update(sala);
-        cargarSalas();
-        limpiarCampos();
+        try {
+            Sala sala = new Sala(
+                    seleccionada.getId(),
+                    txtNombre.getText().trim(),
+                    Integer.parseInt(txtCapacidad.getText().trim()),
+                    chkEstado.isSelected(),
+                    comBoxUbicacion.getValue(),
+                    txtSoftware.getText().trim()
+            );
+
+            salaDAO.update(sala);
+            cargarSalas();
+            limpiarCampos();
+        } catch (NumberFormatException e) {
+            Main.showAlert("Capacidad debe ser un número entero válido.", "Error de formato", Alert.AlertType.ERROR);
+        }
     }
+
 
     @FXML
     private void actionEliminarSala() {
@@ -118,28 +131,25 @@ public class GestionarSalasController {
     }
 
     private void limpiarCampos() {
-        txtId.clear();
         txtNombre.clear();
         txtCapacidad.clear();
         chkEstado.setSelected(false);
-        txtUbicacion.clear();
+        comBoxUbicacion.setValue(null);
         txtSoftware.clear();
         tableSalas.getSelectionModel().clearSelection();
     }
 
     private boolean validarCampos() {
-        if (txtId.getText().trim().isEmpty() ||
-            txtNombre.getText().trim().isEmpty() ||
+        if (txtNombre.getText().trim().isEmpty() ||
             txtCapacidad.getText().trim().isEmpty() ||
-            txtUbicacion.getText().trim().isEmpty() ||
+            comBoxUbicacion.getValue() == null ||
             txtSoftware.getText().trim().isEmpty()) {
 
-            Main.showAlert("Por favor, complete todos los campos sin espacios en blanco.",
-                           "Campos obligatorios",
-                           Alert.AlertType.WARNING);
+            Main.showAlert("Por favor, complete todos los campos sin espacios en blanco.", "Campos obligatorios", Alert.AlertType.WARNING);
             return false;
         }
         return true;
     }
 }
+
 

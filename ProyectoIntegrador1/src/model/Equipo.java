@@ -11,6 +11,12 @@ public class Equipo extends Entidad {
         this.marca = marca;
     }
 
+    public Equipo(String tipo, boolean estado, String marca, String software) {
+        super(null, estado, software); 
+        this.tipo = tipo;
+        this.marca = marca;
+    }
+    
     public String getTipo() {
         return tipo;
     }

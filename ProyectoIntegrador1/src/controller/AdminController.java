@@ -50,11 +50,6 @@ public class AdminController {
     }
 
     @FXML
-    private void actionGestionRoles() {
-    	Main.loadView("/view/GestionRoles.fxml");
-    }
-
-    @FXML
     private void actionGestionarMant() {
     	Main.loadView("/view/GestionarMantenimiento.fxml");
     }

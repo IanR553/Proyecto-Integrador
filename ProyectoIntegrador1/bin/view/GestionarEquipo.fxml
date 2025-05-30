@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -28,8 +29,8 @@
 
             <VBox alignment="TOP_LEFT" maxWidth="300" spacing="8">
                 <Label style="-fx-font-size: 20px; -fx-text-fill: #004a99;" text="Datos del Equipo" />
-                <TextField fx:id="txtId" maxWidth="250" promptText="ID del Equipo" />
-                <TextField fx:id="txtTipo" maxWidth="250" promptText="Tipo de Equipo" />
+            <Label text="Tipo :" />
+            <ComboBox fx:id="comBoxTipo" prefHeight="26.0" prefWidth="205.0" />
                 <CheckBox fx:id="chkEstado" text="¿Está activo?" />
                 <TextField fx:id="txtMarca" maxWidth="250" promptText="Marca" />
                 <TextField fx:id="txtSoftware" maxWidth="250" promptText="Software Instalado" />

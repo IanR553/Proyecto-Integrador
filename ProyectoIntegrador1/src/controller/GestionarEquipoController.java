@@ -13,8 +13,7 @@ import java.sql.Connection;
 
 public class GestionarEquipoController {
 
-    @FXML private TextField txtId;
-    @FXML private TextField txtTipo;
+    @FXML private ComboBox<String> comBoxTipo;
     @FXML private CheckBox chkEstado;
     @FXML private TextField txtMarca;
     @FXML private TextField txtSoftware;
@@ -32,6 +31,8 @@ public class GestionarEquipoController {
 
     @FXML
     public void initialize() {
+    	comBoxTipo.getItems().addAll("Portátil", "Cámara", "Micrófono", "Proyector", "Televisor", "Cable HDMI");
+    	
         colId.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getId()));
         colTipo.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getTipo()));
         colEstado.setCellValueFactory(data ->
@@ -54,9 +55,8 @@ public class GestionarEquipoController {
         tableEquipos.setItems(listaEquipos);
     }
 
-    private void mostrarDatosEquipo(Equipo equipo) {
-        txtId.setText(equipo.getId());
-        txtTipo.setText(equipo.getTipo());
+    private void mostrarDatosEquipo(Equipo equipo) { 
+        comBoxTipo.setValue(equipo.getTipo());
         chkEstado.setSelected(equipo.isEstado());
         txtMarca.setText(equipo.getMarca());
         txtSoftware.setText(equipo.getSoftware() != null ? equipo.getSoftware() : "");
@@ -67,8 +67,7 @@ public class GestionarEquipoController {
         if (!validarCampos()) return;
 
         Equipo equipo = new Equipo(
-                txtId.getText().trim(),
-                txtTipo.getText().trim(),
+        		comBoxTipo.getValue(),
                 chkEstado.isSelected(),
                 txtMarca.getText().trim(),
                 txtSoftware.getText().trim().isEmpty() ? null : txtSoftware.getText().trim()
@@ -82,10 +81,16 @@ public class GestionarEquipoController {
     @FXML
     private void actionActualizarEquipo() {
         if (!validarCampos()) return;
-
+        
+        Equipo seleccionado = tableEquipos.getSelectionModel().getSelectedItem();
+        if (seleccionado == null) {
+            Main.showAlert("Debe seleccionar un equipo para actualizar.", "Sin selección", Alert.AlertType.WARNING);
+            return;
+        }
+        
         Equipo equipo = new Equipo(
-                txtId.getText().trim(),
-                txtTipo.getText().trim(),
+        		seleccionado.getId(),
+        		comBoxTipo.getValue(),
                 chkEstado.isSelected(),
                 txtMarca.getText().trim(),
                 txtSoftware.getText().trim().isEmpty() ? null : txtSoftware.getText().trim()
@@ -117,8 +122,7 @@ public class GestionarEquipoController {
     }
 
     private void limpiarCampos() {
-        txtId.clear();
-        txtTipo.clear();
+    	comBoxTipo.setValue(null);
         chkEstado.setSelected(false);
         txtMarca.clear();
         txtSoftware.clear();
@@ -126,11 +130,10 @@ public class GestionarEquipoController {
     }
 
     private boolean validarCampos() {
-        if (txtId.getText().trim().isEmpty() ||
-            txtTipo.getText().trim().isEmpty() ||
+        if (comBoxTipo.getValue()== null ||
             txtMarca.getText().trim().isEmpty()) {
 
-            Main.showAlert("Por favor, complete los campos ID, Tipo y Marca sin espacios en blanco.",
+            Main.showAlert("Por favor, complete los campos Tipo y Marca sin espacios en blanco.",
                            "Campos obligatorios",
                            Alert.AlertType.WARNING);
             return false;

@@ -1,30 +1,33 @@
 package model;
 
 public class Rol {
-	private String id;
-	private String nombre;
-	
-	public Rol(String id, String nombre) {
-		super();
-		this.id = id;
-		this.nombre = nombre;
-	}
+    private String id;
+    private String nombre;
 
-	public String getId() {
-		return id;
-	}
+    public Rol(String id, String nombre) {
+        this.id = id;
+        this.nombre = nombre;
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public String getNombre() {
-		return nombre;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-	
-	
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    @Override
+    public String toString() {
+        return nombre;
+    }
 }
+
