@@ -1,12 +1,13 @@
 package controller;
 
-import data.DBConnection;
+import data.DBConnectionFactory;
 import data.EquipoDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import model.Equipo;
+import model.UserSession;
 import application.Main;
 
 import java.sql.Connection;
@@ -25,8 +26,8 @@ public class GestionarEquipoController {
     @FXML private TableColumn<Equipo, String> colMarca;
     @FXML private TableColumn<Equipo, String> colSoftware;
 
-    private final Connection connection = DBConnection.getInstance().getConnection();
-    private final EquipoDAO equipoDAO = new EquipoDAO(connection);
+	private Connection connection = DBConnectionFactory.getConnectionByRole(UserSession.getInstance().getRole()).getConnection();
+    private EquipoDAO equipoDAO = new EquipoDAO(connection);
     private ObservableList<Equipo> listaEquipos;
 
     @FXML

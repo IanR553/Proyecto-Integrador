@@ -1,12 +1,13 @@
 package controller;
 
-import data.DBConnection;
+import data.DBConnectionFactory;
 import data.SalaDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import model.Sala;
+import model.UserSession;
 import application.Main;
 
 import java.sql.Connection;
@@ -27,8 +28,8 @@ public class GestionarSalasController {
     @FXML private TableColumn<Sala, String> colUbicacion;
     @FXML private TableColumn<Sala, String> colSoftware;
 
-    private final Connection connection = DBConnection.getInstance().getConnection();
-    private final SalaDAO salaDAO = new SalaDAO(connection);
+    private Connection connection = DBConnectionFactory.getConnectionByRole(UserSession.getInstance().getRole()).getConnection();
+    private SalaDAO salaDAO = new SalaDAO(connection);
     private ObservableList<Sala> listaSalas;
 
     @FXML

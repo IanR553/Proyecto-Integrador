@@ -18,7 +18,7 @@ public class SalaDAO implements CRUD_operaciones<Sala, String> {
 
     @Override
     public void save(Sala sala) {
-        String sql = "INSERT INTO Sala (id, nombre, capacidad, estado, ubicacion, software) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO PI1SIDS.Sala (id, nombre, capacidad, estado, ubicacion, software) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, sala.getId());  
@@ -37,7 +37,7 @@ public class SalaDAO implements CRUD_operaciones<Sala, String> {
     @Override
     public ArrayList<Sala> fetch() {
         ArrayList<Sala> salas = new ArrayList<>();
-        String sql = "SELECT * FROM Sala";
+        String sql = "SELECT * FROM PI1SIDS.Sala";
 
         try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
@@ -62,7 +62,7 @@ public class SalaDAO implements CRUD_operaciones<Sala, String> {
 
     @Override
     public void update(Sala sala) {
-        String sql = "UPDATE Sala SET nombre=?, capacidad=?, estado=?, ubicacion=?, software=? WHERE id=?";
+        String sql = "UPDATE PI1SIDS.Sala SET nombre=?, capacidad=?, estado=?, ubicacion=?, software=? WHERE id=?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, sala.getNombre());
@@ -80,7 +80,7 @@ public class SalaDAO implements CRUD_operaciones<Sala, String> {
 
     @Override
     public void delete(String id) {
-        String sql = "DELETE FROM Sala WHERE id=?";
+        String sql = "DELETE FROM PI1SIDS.Sala WHERE id=?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, id);  
@@ -92,7 +92,7 @@ public class SalaDAO implements CRUD_operaciones<Sala, String> {
 
     @Override
     public boolean authenticate(String id) {
-        String sql = "SELECT id FROM Sala WHERE id=?";
+        String sql = "SELECT id FROM PI1SIDS.Sala WHERE id=?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, id);  

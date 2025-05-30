@@ -4,6 +4,7 @@ import application.Main;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import model.UserSession;
 
 public class AdminController {
 
@@ -57,7 +58,9 @@ public class AdminController {
     @FXML
     private void cerrarSesion() {
         Main.showAlert("Sesión cerrada correctamente.", "Cerrar sesión", Alert.AlertType.INFORMATION);
+        UserSession.getInstance().destroy();
         Main.loadView("/view/Login.fxml"); 
+        
     }
 
 }

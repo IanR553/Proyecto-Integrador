@@ -18,7 +18,7 @@ public class EquipoDAO implements CRUD_operaciones<Equipo, String> {
 
     @Override
     public void save(Equipo equipo) {
-        String query = "INSERT INTO Equipo (id, tipo, estado, marca, software) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO PI1SIDS.Equipo (id, tipo, estado, marca, software) VALUES (?, ?, ?, ?, ?)";
 
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setString(1, equipo.getId());
@@ -36,7 +36,7 @@ public class EquipoDAO implements CRUD_operaciones<Equipo, String> {
     @Override
     public ArrayList<Equipo> fetch() {
         ArrayList<Equipo> equipos = new ArrayList<>();
-        String query = "SELECT * FROM Equipo";
+        String query = "SELECT * FROM PI1SIDS.Equipo";
 
         try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
@@ -60,7 +60,7 @@ public class EquipoDAO implements CRUD_operaciones<Equipo, String> {
 
     @Override
     public void update(Equipo equipo) {
-        String sql = "UPDATE Equipo SET tipo=?, estado=?, marca=?, software=? WHERE id=?";
+        String sql = "UPDATE PI1SIDS.Equipo SET tipo=?, estado=?, marca=?, software=? WHERE id=?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, equipo.getTipo());
@@ -77,7 +77,7 @@ public class EquipoDAO implements CRUD_operaciones<Equipo, String> {
 
     @Override
     public void delete(String id) {
-        String sql = "DELETE FROM Equipo WHERE id=?";
+        String sql = "DELETE FROM PI1SIDS.Equipo WHERE id=?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, id);
@@ -89,7 +89,7 @@ public class EquipoDAO implements CRUD_operaciones<Equipo, String> {
 
     @Override
     public boolean authenticate(String id) {
-        String sql = "SELECT id FROM Equipo WHERE id=?";
+        String sql = "SELECT id FROM PI1SIDS.Equipo WHERE id=?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, id);

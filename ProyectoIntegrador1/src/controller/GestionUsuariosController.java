@@ -1,13 +1,14 @@
 package controller;
 
 import application.Main;
-import data.DBConnection;
+import data.DBConnectionFactory;
 import data.UsuarioDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import model.Rol;
+import model.UserSession;
 import model.Usuario;
 
 import java.sql.Connection;
@@ -36,7 +37,7 @@ public class GestionUsuariosController {
     @FXML private Button btnEliminar;
     @FXML private Button btnVolverMenu;
 
-    private Connection connection = DBConnection.getInstance().getConnection();
+    private Connection connection = DBConnectionFactory.getConnectionByRole(UserSession.getInstance().getRole()).getConnection();
     private UsuarioDAO usuarioDAO = new UsuarioDAO(connection);
     private ObservableList<Usuario> listaUsuarios;
 
@@ -44,7 +45,7 @@ public class GestionUsuariosController {
     private void initialize() {
     	
         comBoxRol.getItems().addAll(
-                new Rol("R1", "Admin"),
+                new Rol("R1", "Manager"),
                 new Rol("R2", "Profesor"),
                 new Rol("R3", "Administrativo"),
                 new Rol("R4", "Estudiante")
