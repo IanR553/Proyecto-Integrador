@@ -11,10 +11,10 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="643.0" prefWidth="614.0" style="-fx-background-color: beige;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ReservaUController">
+<BorderPane prefHeight="681.0" prefWidth="700.0" style="-fx-background-color: beige;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ReservaUController">
 
     <top>
-        <AnchorPane prefHeight="100.0" prefWidth="600.0">
+        <AnchorPane prefHeight="100.0" prefWidth="700.0">
             <children>
                 <ImageView fitHeight="88.0" fitWidth="407.0" layoutX="10.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
                     <image>
@@ -26,58 +26,80 @@
     </top>
 
     <center>
-        <AnchorPane prefHeight="500.0" prefWidth="634.0" BorderPane.alignment="CENTER">
+        <AnchorPane prefHeight="580.0" prefWidth="700.0" BorderPane.alignment="CENTER">
             <children>
-                <Label layoutX="206.0" layoutY="7.0" text="GESTOR DE RESERVAS" textFill="#121213">
+                <Label layoutX="250.0" layoutY="7.0" text="GESTOR DE RESERVAS" textFill="#121213">
                     <font>
                         <Font name="System Bold" size="18.0" />
                     </font>
                 </Label>
 
-                <Button fx:id="btnReservaSala1" layoutX="200.0" layoutY="50.0" prefHeight="26.0" prefWidth="200.0" style="-fx-background-color: #0073e6; -fx-text-fill: white;" text="Reservar Sala">
+                <Button fx:id="btnReservaSala" layoutX="250.0" layoutY="40.0" prefHeight="26.0" prefWidth="200.0" style="-fx-background-color: #0073e6; -fx-text-fill: white;" text="Reservar Sala">
                     <cursor>
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </Button>
 
-                <Button fx:id="btnReservaSala" layoutX="200.0" layoutY="90.0" prefHeight="26.0" prefWidth="200.0" style="-fx-background-color: #0073e6; -fx-text-fill: white;" text="Reservar Equipo">
-                    <cursor>
-                        <Cursor fx:constant="HAND" />
-                    </cursor>
-                </Button>
-
-                <Button fx:id="btnReservaEquipo" layoutX="200.0" layoutY="130.0" prefHeight="26.0" prefWidth="200.0" style="-fx-background-color: #004a99; -fx-text-fill: white;" text="Ver Reservas">
+                <Button fx:id="btnReservaEquipo" layoutX="250.0" layoutY="80.0" prefHeight="26.0" prefWidth="200.0" style="-fx-background-color: #0073e6; -fx-text-fill: white;" text="Reservar Equipo">
                     <cursor>
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </Button>
 
                 <!-- Tabla Salas Reservadas -->
-                <Label layoutX="50.0" layoutY="180.0" text="Salas Reservadas:" textFill="#000000">
+                <Label layoutX="40.0" layoutY="125.0" text="Salas Reservadas:" textFill="#000000">
                     <font>
                         <Font name="System Bold" size="14.0" />
                     </font>
                 </Label>
-                <TableView fx:id="tableSalas" layoutX="50.0" layoutY="200.0" prefHeight="120.0" prefWidth="500.0">
+
+                <TableView fx:id="tableSalas" layoutX="40.0" layoutY="150.0" prefHeight="130.0" prefWidth="620.0">
                     <columns>
-                        <TableColumn fx:id="colIdSala" prefWidth="250.0" text="ID" />
-                        <TableColumn fx:id="colNombreSala" prefWidth="250.0" text="Nombre" />
+                        <TableColumn fx:id="colIdSala" prefWidth="100.0" text="ID" />
+                        <TableColumn fx:id="colNombreSala" prefWidth="150.0" text="Nombre" />
+                        <TableColumn fx:id="colCapacidadSala" prefWidth="100.0" text="Capacidad" />
+                        <TableColumn fx:id="colEstadoSala" prefWidth="100.0" text="Estado" />
+                        <TableColumn fx:id="colUbicacionSala" prefWidth="100.0" text="Ubicación" />
+                        <TableColumn fx:id="colSoftwareSala" prefWidth="70.0" text="Software" />
                     </columns>
                 </TableView>
 
                 <!-- Tabla Equipos Reservados -->
-                <Label layoutX="50.0" layoutY="330.0" text="Equipos Reservados:" textFill="#000000">
+                <Label layoutX="40.0" layoutY="290.0" text="Equipos Reservados:" textFill="#000000">
                     <font>
                         <Font name="System Bold" size="14.0" />
                     </font>
                 </Label>
-                <TableView fx:id="tableEquipos" layoutX="50.0" layoutY="350.0" prefHeight="120.0" prefWidth="500.0">
+
+                <TableView fx:id="tableEquipos" layoutX="40.0" layoutY="315.0" prefHeight="130.0" prefWidth="620.0">
                     <columns>
-                        <TableColumn fx:id="colIdEquipo" prefWidth="250.0" text="ID" />
-                        <TableColumn fx:id="colNombreEquipo" prefWidth="250.0" text="Nombre" />
+                        <TableColumn fx:id="colIdEquipo" prefWidth="100.0" text="ID" />
+                        <TableColumn fx:id="colTipoEquipo" prefWidth="150.0" text="Tipo" />
+                        <TableColumn fx:id="colMarcaEquipo" prefWidth="150.0" text="Marca" />
+                        <TableColumn fx:id="colEstadoEquipo" prefWidth="100.0" text="Estado" />
+                        <TableColumn fx:id="colSoftwareEquipo" prefWidth="120.0" text="Software" />
                     </columns>
                 </TableView>
-                <Button fx:id="btnCerrarSesion" layoutX="257.0" layoutY="491.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="94.0" style="-fx-background-color: #ff3333; -fx-text-fill: white;" text="Cerrar Sesión" />
+
+                <!-- Botones de acción -->
+                <Button fx:id="btnEliminar" layoutX="100.0" layoutY="470.0" prefHeight="26.0" prefWidth="152.0" style="-fx-background-color: #004a99; -fx-text-fill: white;" text="Eliminar Reserva">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+
+                <Button fx:id="btnModificar" layoutX="284.0" layoutY="470.0" prefHeight="26.0" prefWidth="160.0" style="-fx-background-color: #004a99; -fx-text-fill: white;" text="Modificar Reserva">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+
+                <Button fx:id="btnCerrarSesion" layoutX="460.0" layoutY="470.0" prefHeight="26.0" prefWidth="174.0" style="-fx-background-color: #ff3333; -fx-text-fill: white;" text="Cerrar Sesión">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+
             </children>
         </AnchorPane>
     </center>

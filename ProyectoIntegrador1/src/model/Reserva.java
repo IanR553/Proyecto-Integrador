@@ -10,7 +10,6 @@ public class Reserva {
     
     
 	public Reserva(String id, String estado, String tipo, long cedUsuario, String idHorario) {
-		super();
 		this.id = id;
 		this.estado = estado;
 		this.tipo = tipo;
@@ -18,7 +17,13 @@ public class Reserva {
 		this.idHorario = idHorario;
 	}
 
-
+	public Reserva(String estado, String tipo, long cedUsuario, String idHorario) {
+		this.estado = estado;
+		this.tipo = tipo;
+		this.cedUsuario = cedUsuario;
+		this.idHorario = idHorario;
+	}
+	
 	public String getId() {
 		return id;
 	}

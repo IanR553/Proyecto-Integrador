@@ -2,12 +2,12 @@ package controller;
 
 import data.DBConnectionFactory;
 import data.SalaDAO;
+import data.UserSession;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import model.Sala;
-import model.UserSession;
 import application.Main;
 
 import java.sql.Connection;

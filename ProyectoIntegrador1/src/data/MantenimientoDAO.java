@@ -16,29 +16,28 @@ public class MantenimientoDAO implements CRUD_operaciones<Mantenimiento, String>
 
     @Override
     public void save(Mantenimiento mantenimiento) {
-        String sql = "INSERT INTO Mantenimiento (id, motivo, tipo, fechaInicio, fechaFinalPropuesta, cedUsuario) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Mantenimiento (motivo, tipo, fechaInicio, fechaFinalPropuesta, cedUsuario) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setString(1, mantenimiento.getId());
-            pstmt.setString(2, mantenimiento.getMotivo());
-            pstmt.setString(3, mantenimiento.getTipo());
+            pstmt.setString(1, mantenimiento.getMotivo());
+            pstmt.setString(2, mantenimiento.getTipo());
 
             LocalDate fechaInicio = mantenimiento.getFechaInicio();
             LocalDate fechaFinal = mantenimiento.getFechaFinalPropuesta();
 
             if (fechaInicio != null) {
-                pstmt.setDate(4, Date.valueOf(fechaInicio));
+                pstmt.setDate(3, Date.valueOf(fechaInicio));
+            } else {
+                pstmt.setNull(3, Types.DATE);
+            }
+
+            if (fechaFinal != null) {
+                pstmt.setDate(4, Date.valueOf(fechaFinal));
             } else {
                 pstmt.setNull(4, Types.DATE);
             }
 
-            if (fechaFinal != null) {
-                pstmt.setDate(5, Date.valueOf(fechaFinal));
-            } else {
-                pstmt.setNull(5, Types.DATE);
-            }
-
-            pstmt.setLong(6, mantenimiento.getCedUsuario());
+            pstmt.setLong(5, mantenimiento.getCedUsuario());
 
             pstmt.executeUpdate();
         } catch (SQLException e) {

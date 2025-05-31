@@ -18,15 +18,14 @@ public class SalaDAO implements CRUD_operaciones<Sala, String> {
 
     @Override
     public void save(Sala sala) {
-        String sql = "INSERT INTO PI1SIDS.Sala (id, nombre, capacidad, estado, ubicacion, software) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO PI1SIDS.Sala (nombre, capacidad, estado, ubicacion, software) VALUES (?, ?, ?, ?, ?, ?)";
 
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setString(1, sala.getId());  
-            pstmt.setString(2, sala.getNombre());
-            pstmt.setInt(3, sala.getCapacidad());
-            pstmt.setBoolean(4, sala.isEstado());
-            pstmt.setString(5, sala.getUbicacion());
-            pstmt.setString(6, sala.getSoftware());
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) { 
+            pstmt.setString(1, sala.getNombre());
+            pstmt.setInt(2, sala.getCapacidad());
+            pstmt.setBoolean(3, sala.isEstado());
+            pstmt.setString(4, sala.getUbicacion());
+            pstmt.setString(5, sala.getSoftware());
 
             pstmt.executeUpdate();
         } catch (SQLException e) {

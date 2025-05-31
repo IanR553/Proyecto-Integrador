@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -9,9 +10,10 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="678.0" prefWidth="534.0" style="-fx-background-color: beige;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.EquipoController">
+<BorderPane prefHeight="678.0" prefWidth="799.0" style="-fx-background-color: beige;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.EquipoController">
 
     <top>
         <ImageView fitHeight="88.0" fitWidth="407.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
@@ -22,40 +24,48 @@
     </top>
 
     <center>
-        <VBox alignment="CENTER" prefHeight="637.0" prefWidth="520.0" spacing="10">
-            <Label style="-fx-font-size: 20px; -fx-text-fill: #004a99;" text="Reserva de Equipo" />
+        <HBox alignment="CENTER" spacing="30">
+            <!-- Sección de búsqueda -->
+            <VBox alignment="TOP_CENTER" prefWidth="350" spacing="10">
+                <Label style="-fx-font-size: 20px; -fx-text-fill: #004a99;" text="Reserva de Equipo" />
 
-            <Label text="Seleccione los equipos necesarios:" />
-            <ComboBox fx:id="cbxEquipos" maxWidth="250" />
+                <Label text="Seleccione el tipo de equipo" />
+                <ComboBox fx:id="cbxEquipos" maxWidth="250" />
 
-            <Label text="Seleccione los software requeridos:" />
-            <ComboBox fx:id="cbxSoftware" maxWidth="250" />
+                <Label text="Seleccione los software requeridos:" />
+                <ComboBox fx:id="cbxSoftware" maxWidth="250" />
+            <Label text="Seleccione la Semana" />
+            <ComboBox fx:id="comBoxSemana" prefWidth="150.0" />
 
-            <Label text="Solo podra reservar para el dia de hoy" />
-            
-            <Label text="Hora de inicio:" />
-            <TextField fx:id="txtHoraInicio" maxWidth="250" promptText="Ejemplo: 08:00 AM" />
-            
-            <Label text="Hora de fin:" />
-            <TextField fx:id="txtHoraFin" maxWidth="250" promptText="Ejemplo: 10:00 AM" />
+                <Label text="Solo podra reservar para el dia de hoy" />
 
-            <!-- Botón para buscar salas disponibles -->
-            <Button fx:id="btnBuscarSalas" maxWidth="250" style="-fx-background-color: #004a99; -fx-text-fill: white;" text="Buscar Equipos en salas disponibles" />
-            
-            <!-- Sección para mostrar salas disponibles -->
-            <Label style="-fx-font-size: 16px; -fx-text-fill: #004a99;" text="Equipo Disponibles:" />
-            <TableView fx:id="tableSalasDisponibles" maxHeight="150" maxWidth="400" prefWidth="318.0">
-                <columns>
-               <TableColumn fx:id="colIdSala" prefWidth="63.20001524686813" text="ID de Sala" />
-                    <TableColumn fx:id="colNombreSala" prefWidth="128.8000030517578" text="Nombre de Sala" />
-               <TableColumn fx:id="colUbicacionSala" prefWidth="106.40000915527344" text="Ubicacion de Sala" />
-               <TableColumn fx:id="colCapacidadSala" prefWidth="102.40003967285156" text="Capacidad" />
-                    <!-- Puedes agregar más columnas aquí -->
-                </columns>
-            </TableView>
+                <Label text="Fecha de la reserva:" />
+                <DatePicker fx:id="datePicker" maxWidth="250" />
 
-            <!-- Botón para reservar (se activará después de la búsqueda) -->
-            <Button fx:id="btnReservar" disable="true" maxWidth="250" style="-fx-background-color: #0073e6; -fx-text-fill: white;" text="Reservar Equipo" /> 
-        </VBox>
+                <Label text="Hora de inicio:" />
+                <TextField fx:id="txtHoraInicio" maxWidth="250" promptText="Ejemplo: 08:00 AM" />
+
+                <Label text="Hora de fin:" />
+                <TextField fx:id="txtHoraFin" maxWidth="250" promptText="Ejemplo: 10:00 AM" />
+
+                <Button fx:id="btnBuscarSalas" maxWidth="250" style="-fx-background-color: #004a99; -fx-text-fill: white;" text="Buscar equipos" />
+            </VBox>
+
+            <!-- Sección de resultados -->
+            <VBox alignment="TOP_CENTER" prefWidth="400" spacing="10">
+                <Label style="-fx-font-size: 16px; -fx-text-fill: #004a99;" text="Equipos Disponibles:" />
+                <TableView fx:id="tableSalasDisponibles" maxHeight="300" prefWidth="380">
+                    <columns>
+                        <TableColumn fx:id="colIdSala" prefWidth="80" text="ID de Sala" />
+                        <TableColumn fx:id="colNombreSala" prefWidth="120" text="Nombre de Sala" />
+                        <TableColumn fx:id="colUbicacionSala" prefWidth="100" text="Ubicación" />
+                        <TableColumn fx:id="colCapacidadSala" prefWidth="80" text="Capacidad" />
+                    </columns>
+                </TableView>
+
+                <Button fx:id="btnReservar" disable="true" maxWidth="250" style="-fx-background-color: #0073e6; -fx-text-fill: white;" text="Reservar Equipo" />
+            <Button mnemonicParsing="false" onAction="#regresarMenu" text="Regresar" />
+            </VBox>
+        </HBox>
     </center>
 </BorderPane>

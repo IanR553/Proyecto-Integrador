@@ -14,14 +14,13 @@ public class ReservaDAO implements CRUD_operaciones<Reserva, String> {
 
     @Override
     public void save(Reserva reserva) {
-        String sql = "INSERT INTO Reserva (id, estado, tipo, cedUsuario, idHorario) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO PI1SIDS.Reserva (estado, tipo, cedUsuario, idHorario) VALUES (?, ?, ?, ?)";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setString(1, reserva.getId());
-            pstmt.setString(2, reserva.getEstado());
-            pstmt.setString(3, reserva.getTipo());
-            pstmt.setLong(4, reserva.getCedUsuario());
-            pstmt.setString(5, reserva.getIdHorario());
+            pstmt.setString(1, reserva.getEstado());
+            pstmt.setString(2, reserva.getTipo());
+            pstmt.setLong(3, reserva.getCedUsuario());
+            pstmt.setString(4, reserva.getIdHorario());
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -29,10 +28,11 @@ public class ReservaDAO implements CRUD_operaciones<Reserva, String> {
         }
     }
 
+
     @Override
     public ArrayList<Reserva> fetch() {
         ArrayList<Reserva> reservas = new ArrayList<>();
-        String query = "SELECT id, estado, tipo, cedUsuario, idHorario FROM Reserva";
+        String query = "SELECT id, estado, tipo, cedUsuario, idHorario FROM PI1SIDS.Reserva";
 
         try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
@@ -57,7 +57,7 @@ public class ReservaDAO implements CRUD_operaciones<Reserva, String> {
 
     @Override
     public void update(Reserva reserva) {
-        String sql = "UPDATE Reserva SET estado = ?, tipo = ?, cedUsuario = ?, idHorario = ? WHERE id = ?";
+        String sql = "UPDATE PI1SIDS.Reserva SET estado = ?, tipo = ?, cedUsuario = ?, idHorario = ? WHERE id = ?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, reserva.getEstado());
@@ -74,7 +74,7 @@ public class ReservaDAO implements CRUD_operaciones<Reserva, String> {
 
     @Override
     public void delete(String id) {
-        String sql = "DELETE FROM Reserva WHERE id = ?";
+        String sql = "DELETE FROM PI1SIDS.Reserva WHERE id = ?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, id);
@@ -86,7 +86,7 @@ public class ReservaDAO implements CRUD_operaciones<Reserva, String> {
 
     @Override
     public boolean authenticate(String id) {
-        String sql = "SELECT id FROM Reserva WHERE id = ?";
+        String sql = "SELECT id FROM PI1SIDS.Reserva WHERE id = ?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, id);
@@ -98,6 +98,26 @@ public class ReservaDAO implements CRUD_operaciones<Reserva, String> {
 
         return false;
     }
+    
+
+    public String traerIdPorCedulaYHorario(long cedula, String idHorario) {
+        String sql = "SELECT id FROM PI1SIDS.Reserva WHERE cedUsuario = ? AND idHorario = ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setLong(1, cedula);
+            pstmt.setString(2, idHorario);
+
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString("id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null; 
+    }
+
 }
 
 

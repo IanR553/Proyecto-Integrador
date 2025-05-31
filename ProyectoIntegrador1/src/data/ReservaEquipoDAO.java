@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import model.ReservaEquipo;
 
-public class ReservaEquipoDAO implements CRUD_operaciones_Relacion <ReservaEquipo,String,String>{
+public class ReservaEquipoDAO {
 
     private Connection connection;
 
@@ -16,21 +16,24 @@ public class ReservaEquipoDAO implements CRUD_operaciones_Relacion <ReservaEquip
         this.connection = connection;
     }
 
-    public void save(ReservaEquipo entity) {
-        String query = "INSERT INTO reserva_equipo (id_reserva, id_equipo) VALUES (?, ?)";
+    public boolean save(ReservaEquipo reservaEquipo) {
+        String sql = "INSERT INTO PI1SIDS.ReservaEquipo (idReserva, idEquipo) VALUES (?, ?)";
 
-        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setString(1, entity.getIdReserva());
-            pstmt.setString(2, entity.getIdEquipo());
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setString(1, reservaEquipo.getIdReserva());
+            pstmt.setString(2, reservaEquipo.getIdEquipo());
             pstmt.executeUpdate();
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
     }
 
+
     public ArrayList<ReservaEquipo> fetch() {
         ArrayList<ReservaEquipo> lista = new ArrayList<>();
-        String query = "SELECT id_reserva, id_equipo FROM reserva_equipo";
+        String query = "SELECT id_reserva, id_equipo FROM PI1SIDS.reserva_equipo";
 
         try (PreparedStatement pstmt = connection.prepareStatement(query);
              ResultSet rs = pstmt.executeQuery()) {
@@ -51,7 +54,7 @@ public class ReservaEquipoDAO implements CRUD_operaciones_Relacion <ReservaEquip
     }
 
     public void update(ReservaEquipo entity) {
-        String query = "UPDATE reserva_equipo SET id_equipo = ? WHERE id_reserva = ?";
+        String query = "UPDATE PI1SIDS.reserva_equipo SET id_equipo = ? WHERE id_reserva = ?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setString(1, entity.getIdEquipo());
@@ -63,7 +66,7 @@ public class ReservaEquipoDAO implements CRUD_operaciones_Relacion <ReservaEquip
     }
 
     public void delete(String idReserva, String idEquipo) {
-        String query = "DELETE FROM reserva_equipo WHERE id_reserva = ? AND id_equipo = ?";
+        String query = "DELETE FROM PI1SIDS.reserva_equipo WHERE id_reserva = ? AND id_equipo = ?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setString(1, idReserva);
@@ -75,7 +78,7 @@ public class ReservaEquipoDAO implements CRUD_operaciones_Relacion <ReservaEquip
     }
 
     public boolean authenticate(String idReserva, String idEquipo) {
-        String sql = "SELECT id_reserva, id_equipo FROM reserva_equipo WHERE id_reserva = ? AND id_equipo = ?";
+        String sql = "SELECT id_reserva, id_equipo FROM PI1SIDS.reserva_equipo WHERE id_reserva = ? AND id_equipo = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, idReserva);

@@ -21,6 +21,16 @@ public class Mantenimiento {
 		this.fechaFinalPropuesta = fechaFinalPropuesta;
 		this.cedUsuario = cedUsuario;
 	}
+	
+	public Mantenimiento(String motivo, String tipo, LocalDate fechaInicio, LocalDate fechaFinalPropuesta,
+			long cedUsuario) {
+		this.motivo = motivo;
+		this.tipo = tipo;
+		this.fechaInicio = fechaInicio;
+		this.fechaFinalPropuesta = fechaFinalPropuesta;
+		this.cedUsuario = cedUsuario;
+	}
+	
 	public String getId() {
 		return id;
 	}

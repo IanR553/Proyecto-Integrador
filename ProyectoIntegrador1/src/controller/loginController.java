@@ -4,6 +4,7 @@ import java.sql.Connection;
 
 import application.Main;
 import data.DBConnectionFactory;
+import data.UserSession;
 import data.UsuarioDAO;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -13,7 +14,6 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import model.Rol;
-import model.UserSession;
 
 public class loginController {
 

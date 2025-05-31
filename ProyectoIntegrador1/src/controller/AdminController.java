@@ -1,10 +1,10 @@
 package controller;
 
 import application.Main;
+import data.UserSession;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import model.UserSession;
 
 public class AdminController {
 
