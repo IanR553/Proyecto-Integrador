@@ -17,7 +17,7 @@ public class ReservaEquipoDAO {
     }
 
     public boolean save(ReservaEquipo reservaEquipo) {
-        String sql = "INSERT INTO PI1SIDS.ReservaEquipo (idReserva, idEquipo) VALUES (?, ?)";
+        String sql = "INSERT INTO PI1SIDS.reserva_equipo (id_reserva, id_equipo) VALUES (?, ?)";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, reservaEquipo.getIdReserva());
@@ -30,6 +30,42 @@ public class ReservaEquipoDAO {
         }
     }
 
+    public ArrayList<ReservaEquipo> obtenerReservasConEquiposPorUsuario(long cedulaUsuario) {
+        ArrayList<ReservaEquipo> lista = new ArrayList<>();
+
+        String sql = """
+            SELECT r.id AS id_reserva, r.tipo, r.estado, 
+                   e.id AS id_equipo, e.tipo AS tipo_equipo, e.marca, e.software
+            FROM PI1SIDS.reserva r
+            JOIN PI1SIDS.reserva_equipo re ON r.id = re.id_reserva
+            JOIN PI1SIDS.equipo e ON re.id_equipo = e.id
+            WHERE r.cedusuario = ?
+        """;
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setLong(1, cedulaUsuario);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                ReservaEquipo reservaEquipo = new ReservaEquipo(
+                    rs.getString("id_reserva"),
+                    rs.getString("tipo"),
+                    rs.getString("estado"),
+                    rs.getString("id_equipo"),
+                    rs.getString("tipo_equipo"),
+                    rs.getString("marca"),
+                    rs.getString("software")
+                );
+                lista.add(reservaEquipo);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return lista;
+    }
+
+    
 
     public ArrayList<ReservaEquipo> fetch() {
         ArrayList<ReservaEquipo> lista = new ArrayList<>();

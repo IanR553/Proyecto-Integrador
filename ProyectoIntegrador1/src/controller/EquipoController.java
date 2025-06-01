@@ -58,13 +58,17 @@ public class EquipoController {
         reservaEquipoDAO = new ReservaEquipoDAO(connection);
 
         cbxEquipos.getItems().addAll("Portatil", "Camara", "Microfono", "Proyector", "Televisor", "Cable HDMI");
-        cbxSoftware.getItems().addAll("Office", "AutoCAD", "Eclipse", "Visual Studio", "Ninguno");
+        ArrayList<String> softwaresBD = equipoDAO.obtenerSoftwaresUnicos();
+        softwaresBD.add("Ninguno"); // 
+        cbxSoftware.getItems().addAll(softwaresBD);
+
         comBoxSemana.getItems().addAll(1, 2);
 
         colIdSala.setCellValueFactory(new PropertyValueFactory<>("id"));
         colNombreSala.setCellValueFactory(new PropertyValueFactory<>("tipo"));
         colUbicacionSala.setCellValueFactory(new PropertyValueFactory<>("marca"));
-        colCapacidadSala.setCellValueFactory(new PropertyValueFactory<>("estadoTexto"));
+        colCapacidadSala.setCellValueFactory(new PropertyValueFactory<>("software"));
+
 
         btnBuscarSalas.setOnAction(e -> buscarEquiposDisponibles());
         btnReservar.setOnAction(e -> reservarEquipo());
@@ -72,8 +76,9 @@ public class EquipoController {
         tableSalasDisponibles.getSelectionModel().selectedItemProperty().addListener((obs, oldSel, newSel) -> {
             btnReservar.setDisable(newSel == null);
         });
-
-        // Solo permitir seleccionar la fecha actual
+        
+        datePicker.setValue(LocalDate.now());
+     /*   // Solo permitir seleccionar la fecha actual
         datePicker.setDayCellFactory(picker -> new DateCell() {
             public void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);
@@ -81,6 +86,7 @@ public class EquipoController {
             }
         });
         datePicker.setValue(LocalDate.now());
+        */
     }
 
     private void buscarEquiposDisponibles() {
@@ -100,6 +106,9 @@ public class EquipoController {
         ArrayList<Equipo> disponibles = equipoDAO.fetchDisponibles(tipo, software);
         listaEquiposDisponibles = FXCollections.observableArrayList(disponibles);
         tableSalasDisponibles.setItems(listaEquiposDisponibles);
+        System.out.println("Buscando equipos tipo: " + tipo + ", software: " + software);
+        System.out.println("Equipos encontrados: " + disponibles.size());
+
     }
 
     private void reservarEquipo() {
@@ -121,13 +130,18 @@ public class EquipoController {
 
         // Obtener nombre del día en español
         String diaSemana = fechaSeleccionada.getDayOfWeek()
-                .getDisplayName(TextStyle.FULL, new Locale("es", "ES"));
+                .getDisplayName(TextStyle.FULL, new Locale("es", "ES"))
+                .toLowerCase();  
+
 
         // Buscar idHorario
         String idHorario = horarioDAO.traerIdHorario(semana, diaSemana, horaInicio, horaFin);
         
      // Validar si se encontró horario
         if (idHorario == null) {
+        	System.out.println("Buscando horario con: semana=" + semana +
+        		    ", dia=" + diaSemana + ", horaInicio=" + horaInicio + ", horaFin=" + horaFin);
+
             Main.showAlert("No se encontró un horario con los datos proporcionados.", "Horario no encontrado", Alert.AlertType.WARNING);
             return;
         }
@@ -158,6 +172,7 @@ public class EquipoController {
         } else {
             Main.showAlert("No se pudo completar la reserva. Verifique disponibilidad o conflicto de horarios.", "Error", Alert.AlertType.ERROR);
         }
+        
     }
     
     @FXML

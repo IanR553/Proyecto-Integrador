@@ -1,60 +1,57 @@
 package controller;
 
+import application.Main;
 import data.DBConnectionFactory;
-import data.EquipoDAO;
+import data.ReservaEquipoDAO;
 import data.UserSession;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
-import model.Equipo;
-import application.Main;
+import javafx.scene.control.cell.PropertyValueFactory;
+import model.ReservaEquipo;
 
 import java.sql.Connection;
 import java.util.ArrayList;
 
-
 public class ReservaEController {
 
-    @FXML private Button btnequipo;
-    @FXML private Button btnCerrarSesion;
-    @FXML private TableView<Equipo> tableEquipos;
-    @FXML private TableColumn<Equipo, String> colIdEquipo;
-    @FXML private TableColumn<Equipo, String> colNombreEquipo;
+	@FXML private TableView<ReservaEquipo> tableReservas;
+	@FXML private TableColumn<ReservaEquipo, String> colTipo;
+	@FXML private TableColumn<ReservaEquipo, String> colEstado;
+	@FXML private TableColumn<ReservaEquipo, String> colTipoEquipo;
+	@FXML private TableColumn<ReservaEquipo, String> colMarca;
+	@FXML private TableColumn<ReservaEquipo, String> colSoftware;
+	
+	@FXML private Button btnequipo;
+	@FXML private Button btnCerrarSesion;
 
-    private Connection connection;
-    private EquipoDAO equipoDAO;
-    private ObservableList<Equipo> listaEquiposReservados;
+    private Connection connection = DBConnectionFactory.getConnectionByRole(UserSession.getInstance().getRole()).getConnection();
+    private ReservaEquipoDAO reservaEquipoDAO = new ReservaEquipoDAO(connection);
 
     @FXML
     public void initialize() {
-        // Inicializar conexión y DAO
-        connection = DBConnectionFactory.getConnectionByRole(UserSession.getInstance().getRole()).getConnection();
-        equipoDAO = new EquipoDAO(connection);
+        colTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
+        colEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
+        colTipoEquipo.setCellValueFactory(new PropertyValueFactory<>("tipoEquipo"));
+        colMarca.setCellValueFactory(new PropertyValueFactory<>("marca"));
+        colSoftware.setCellValueFactory(new PropertyValueFactory<>("software"));
 
-        // Configurar columnas de la tabla
-        colIdEquipo.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getId()));
-        colNombreEquipo.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getTipo()));
-
-        // Cargar equipos reservados por el estudiante
-        cargarEquiposReservados();
-
-        // Acción botón para ir a reservar equipo
+        cargarReservas();
+        
         btnequipo.setOnAction(e -> Main.loadView("/view/Equipo.fxml"));
-
-        // Acción cerrar sesión
         btnCerrarSesion.setOnAction(e -> {
             UserSession.getInstance().destroy();
             Main.loadView("/view/Login.fxml");
         });
     }
 
-    private void cargarEquiposReservados() {
-        long cedulaEstudiante = Long.parseLong(UserSession.getInstance().getUsername());
-        ArrayList<Equipo> equipos = equipoDAO.fetch();
-        listaEquiposReservados = FXCollections.observableArrayList(equipos);
-        tableEquipos.setItems(listaEquiposReservados);
+    private void cargarReservas() {
+        long cedula = Long.parseLong(UserSession.getInstance().getUsername());
+        ArrayList<ReservaEquipo> reservas = reservaEquipoDAO.obtenerReservasConEquiposPorUsuario(cedula);
+        ObservableList<ReservaEquipo> lista = FXCollections.observableArrayList(reservas);
+        tableReservas.setItems(lista);
     }
 }
+
 
