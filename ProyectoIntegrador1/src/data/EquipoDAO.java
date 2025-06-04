@@ -177,7 +177,7 @@ public class EquipoDAO implements CRUD_operaciones<Equipo, String> {
 	            if (softwares != null && !softwares.trim().isEmpty()) {
 	                String[] separados = softwares.split(",");
 	                for (String sw : separados) {
-	                    String limpio = sw.trim();
+	                    String limpio = sw.trim().toUpperCase(); // Convertir a mayúsculas
 	                    if (!limpio.isEmpty()) {
 	                        softwareUnicos.add(limpio);
 	                    }
@@ -190,9 +190,76 @@ public class EquipoDAO implements CRUD_operaciones<Equipo, String> {
 	    }
 
 	    ArrayList<String> listaOrdenada = new ArrayList<>(softwareUnicos);
-	    Collections.sort(listaOrdenada); // ordena alfabéticamente si deseas
+	    Collections.sort(listaOrdenada); // Orden alfabético en mayúsculas
 	    return listaOrdenada;
 	}
+
+
+	public ArrayList<Equipo> fetchDisponiblesPorHorario(String tipo, String software, String idHorario) {
+	    ArrayList<Equipo> lista = new ArrayList<>();
+	    try {
+	        PreparedStatement stmt;
+	        String query;
+
+	        if ("Ninguno".equalsIgnoreCase(software)) {
+	            // Cuando es "Ninguno", mostrar TODOS los equipos disponibles sin importar el software
+	            query = """
+	                SELECT * FROM PI1SIDS.EQUIPO e
+	                WHERE e.estado = 1
+	                AND TRIM(UPPER(e.tipo)) = ?
+	                AND e.id NOT IN (
+	                    SELECT re.id_equipo
+	                    FROM PI1SIDS.RESERVA_EQUIPO re
+	                    JOIN PI1SIDS.RESERVA r ON re.id_reserva = r.id
+	                    WHERE UPPER(r.idhorario) = ?
+	                )
+	                """;
+	            stmt = connection.prepareStatement(query);
+	            stmt.setString(1, tipo.toUpperCase().trim());
+	            stmt.setString(2, idHorario.toUpperCase().trim());
+	        } else {
+	            // Cuando hay un software específico, filtrar por ese software
+	            query = """
+	                SELECT * FROM PI1SIDS.EQUIPO e
+	                WHERE e.estado = 1
+	                AND TRIM(UPPER(e.tipo)) = ?
+	                AND TRIM(UPPER(e.software)) LIKE ?
+	                AND e.id NOT IN (
+	                    SELECT re.id_equipo
+	                    FROM PI1SIDS.RESERVA_EQUIPO re
+	                    JOIN PI1SIDS.RESERVA r ON re.id_reserva = r.id
+	                    WHERE UPPER(r.idhorario) = ?
+	                )
+	                """;
+	            stmt = connection.prepareStatement(query);
+	            stmt.setString(1, tipo.toUpperCase().trim());
+	            stmt.setString(2, "%" + software.toUpperCase().trim() + "%");
+	            stmt.setString(3, idHorario.toUpperCase().trim());
+	        }
+
+	        ResultSet rs = stmt.executeQuery();
+	        while (rs.next()) {
+	            String id = rs.getString("id");
+	            String tipoEquipo = rs.getString("tipo");
+	            boolean estado = rs.getInt("estado") == 1;
+	            String marca = rs.getString("marca");
+	            String softwareEquipo = rs.getString("software");
+
+	            Equipo e = new Equipo(id, tipoEquipo, estado, marca, softwareEquipo);
+	            lista.add(e);
+	        }
+	        rs.close();
+	        stmt.close();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return lista;
+	}
+
+
+
+
+
 
 
 }

@@ -57,7 +57,7 @@ public class EquipoController {
         reservaDAO = new ReservaDAO(connection);
         reservaEquipoDAO = new ReservaEquipoDAO(connection);
 
-        cbxEquipos.getItems().addAll("Portatil", "Camara", "Microfono", "Proyector", "Televisor", "Cable HDMI");
+        cbxEquipos.getItems().addAll("PORTATIL", "CAMARA", "MICROFONO", "PROYECTOR", "TELEVISOR", "CABLE HDMI");
         ArrayList<String> softwaresBD = equipoDAO.obtenerSoftwaresUnicos();
         softwaresBD.add("Ninguno"); // 
         cbxSoftware.getItems().addAll(softwaresBD);
@@ -78,7 +78,7 @@ public class EquipoController {
         });
         
         datePicker.setValue(LocalDate.now());
-     /*   // Solo permitir seleccionar la fecha actual
+        // Solo permitir seleccionar la fecha actual
         datePicker.setDayCellFactory(picker -> new DateCell() {
             public void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);
@@ -86,7 +86,7 @@ public class EquipoController {
             }
         });
         datePicker.setValue(LocalDate.now());
-        */
+        
     }
 
     private void buscarEquiposDisponibles() {
@@ -102,14 +102,43 @@ public class EquipoController {
             return;
         }
 
-        // Buscar equipos disponibles
-        ArrayList<Equipo> disponibles = equipoDAO.fetchDisponibles(tipo, software);
+        LocalTime horaInicio;
+        LocalTime horaFin;
+        try {
+            horaInicio = LocalTime.parse(horaInicioStr);
+            horaFin = LocalTime.parse(horaFinStr);
+        } catch (Exception e) {
+            Main.showAlert("Formato de hora incorrecto. Use HH:mm (ej. 14:00).", "Error de formato", Alert.AlertType.ERROR);
+            return;
+        }
+
+        // Obtener nombre del día en español
+        String diaSemana = switch ( fechaSeleccionada.getDayOfWeek()) {
+	        case MONDAY -> "lunes";
+	        case TUESDAY -> "martes";
+	        case WEDNESDAY -> "miercoles"; 
+	        case THURSDAY -> "jueves";
+	        case FRIDAY -> "viernes";
+	        case SATURDAY -> "sabado";
+	        case SUNDAY -> "domingo";
+        };
+        
+        System.out.println(semana + ", " + diaSemana + ", " + horaInicio + ", " + horaFin);
+        String idHorario = horarioDAO.traerIdHorario(semana, diaSemana, horaInicio, horaFin);
+        System.out.println(idHorario);
+        if (idHorario == null) {
+            Main.showAlert("No se encontró un horario con los datos proporcionados.", "Horario no encontrado", Alert.AlertType.WARNING);
+            return;
+        }
+
+        ArrayList<Equipo> disponibles = equipoDAO.fetchDisponiblesPorHorario(tipo, software, idHorario);
         listaEquiposDisponibles = FXCollections.observableArrayList(disponibles);
         tableSalasDisponibles.setItems(listaEquiposDisponibles);
-        System.out.println("Buscando equipos tipo: " + tipo + ", software: " + software);
-        System.out.println("Equipos encontrados: " + disponibles.size());
 
+        System.out.println("Buscando equipos tipo: " + tipo + ", software: " + software);
+        System.out.println("Equipos disponibles: " + disponibles.size());
     }
+
 
     private void reservarEquipo() {
     	
@@ -129,9 +158,15 @@ public class EquipoController {
         }
 
         // Obtener nombre del día en español
-        String diaSemana = fechaSeleccionada.getDayOfWeek()
-                .getDisplayName(TextStyle.FULL, new Locale("es", "ES"))
-                .toLowerCase();  
+        String diaSemana = switch ( fechaSeleccionada.getDayOfWeek()) {
+        case MONDAY -> "lunes";
+        case TUESDAY -> "martes";
+        case WEDNESDAY -> "miercoles"; 
+        case THURSDAY -> "jueves";
+        case FRIDAY -> "viernes";
+        case SATURDAY -> "sabado";
+        case SUNDAY -> "domingo";
+    };
 
 
         // Buscar idHorario
@@ -158,7 +193,6 @@ public class EquipoController {
         
         Reserva reservaEqui = new Reserva("Pendiente", "Equipo", cedula, idHorario);
         reservaDAO.save(reservaEqui);
-        equipoDAO.updateNoDisponible(seleccionado.getId());
         
         String idReserva = reservaDAO.traerIdPorCedulaYHorario(reservaEqui.getCedUsuario(), reservaEqui.getIdHorario());
         
