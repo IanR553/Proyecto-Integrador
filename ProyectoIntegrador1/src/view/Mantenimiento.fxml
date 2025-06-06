@@ -15,9 +15,7 @@
 
     <top>
         <ImageView disable="true" fitHeight="88.0" fitWidth="407.0" pickOnBounds="true" preserveRatio="true" style="-fx-border-color: #000000;" BorderPane.alignment="CENTER">
-            <image>
-                <Image url="@../../resources/images/logo-udi.png" />
-            </image>
+
         </ImageView>
     </top>
 

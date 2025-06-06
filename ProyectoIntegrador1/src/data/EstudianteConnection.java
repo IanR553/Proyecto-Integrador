@@ -10,9 +10,9 @@ public class EstudianteConnection implements DBConnection{
     private Connection connection;
 	private final String username="estudiante_PI25";
 	private final String password="estudiante_PI25";
-	private final String host = "localhost";
+	private final String host = "192.168.254.215";
 	private final String port = "1521";
-	private final String service = "XE";
+	private final String service = "orcl";
 
     private EstudianteConnection() {
         try {

@@ -10,9 +10,9 @@ public class AdministrativoConnection implements DBConnection{
     private Connection connection;
 	private final String username="administrativo_PI25";
 	private final String password="administrativo_PI25";
-	private final String host = "localhost";
+	private final String host = "192.168.254.215";
 	private final String port = "1521";
-	private final String service = "XE";
+	private final String service = "orcl";
 
     private AdministrativoConnection() {
         try {
