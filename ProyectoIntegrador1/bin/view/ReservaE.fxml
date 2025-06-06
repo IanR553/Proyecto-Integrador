@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="530.0" prefWidth="512.0" style="-fx-background-color: beige;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ReservaEController">
+<BorderPane prefHeight="573.0" prefWidth="524.0" style="-fx-background-color: beige;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ReservaEController">
 
 	<top>
 		<AnchorPane prefHeight="100.0" prefWidth="500.0">
@@ -58,7 +58,8 @@
 					</font>
 				</Label>
 
-				<Button fx:id="btnCerrarSesion" layoutX="206.0" layoutY="379.0" mnemonicParsing="false" style="-fx-background-color: #ff3333; -fx-text-fill: white;" text="Cerrar Sesión" />
+				<Button fx:id="btnCerrarSesion" layoutX="212.0" layoutY="416.0" mnemonicParsing="false" style="-fx-background-color: #ff3333; -fx-text-fill: white;" text="Cerrar Sesión" />
+            <Button layoutX="204.0" layoutY="374.0" mnemonicParsing="false" onAction="#eliminarReserva" text="Eliminar Reserva" />
 			</children>
 		</AnchorPane>
 	</center>

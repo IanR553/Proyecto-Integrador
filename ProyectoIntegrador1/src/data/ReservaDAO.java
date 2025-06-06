@@ -100,12 +100,13 @@ public class ReservaDAO implements CRUD_operaciones<Reserva, String> {
     }
     
 
-    public String traerIdPorCedulaYHorario(long cedula, String idHorario) {
-        String sql = "SELECT id FROM PI1SIDS.Reserva WHERE cedUsuario = ? AND idHorario = ?";
+    public String traerIdPorCedulaYHorario(long cedula, String idHorario, String tipo) {
+        String sql = "SELECT id FROM PI1SIDS.Reserva WHERE cedUsuario = ? AND idHorario = ? AND tipo = ?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setLong(1, cedula);
             pstmt.setString(2, idHorario);
+            pstmt.setString(3, tipo);
 
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {

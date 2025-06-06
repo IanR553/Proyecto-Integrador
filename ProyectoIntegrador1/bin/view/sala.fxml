@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="700.0" prefWidth="800.0" style="-fx-background-color: beige;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SalaController">
+<BorderPane prefHeight="725.0" prefWidth="799.0" style="-fx-background-color: beige;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SalaController">
 
     <top>
         <ImageView fitHeight="88.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
@@ -31,13 +31,17 @@
                 <Label style="-fx-font-size: 20px; -fx-text-fill: #004a99;" text="Reserva de Sala" />
 
                 <Label text="Capacidad de personas:" />
-                <ComboBox fx:id="cmbCapacidad" maxWidth="250" />
+            <TextField fx:id="txtCapacidad" />
 
-                <Label text="Seleccione los equipos necesarios:" />
-                <ComboBox fx:id="cmbEquipos" maxWidth="250" />
+                <Label text="Seleccione Software para la sala:" />
+                <ComboBox fx:id="comBoxSoftwareSala" maxWidth="250" />
 
-                <Label text="Seleccione los software requeridos:" />
-                <ComboBox fx:id="cmbSoftware" maxWidth="250" />
+                <Label text="Seleccione el equipo necesario:" />
+                <ComboBox fx:id="comBoxEquipo" maxWidth="250" />
+            <Label text="Seleccione Software para el equipo:" />
+            <ComboBox fx:id="comBoxSoftwareEquipo" prefWidth="150.0" />
+            <Label text="Semana:" />
+            <ComboBox fx:id="comBoxSemana" prefWidth="150.0" />
 
                 <Label text="Fecha de reserva:" />
                 <DatePicker fx:id="dpFecha" maxWidth="250" />
@@ -48,15 +52,14 @@
                 <Label text="Hora de fin:" />
                 <TextField fx:id="txtHoraFin" maxWidth="250" promptText="Ejemplo: 10:00 AM" />
 
-                <Button fx:id="btnBuscarSalas" maxWidth="250" style="-fx-background-color: #004a99; -fx-text-fill: white;" text="Buscar Salas Disponibles" />
-                <Button fx:id="btnReservar" disable="true" maxWidth="250" style="-fx-background-color: #0073e6; -fx-text-fill: white;" text="Reservar Sala" />
-                <Button fx:id="btnVolverMenu" maxWidth="250" style="-fx-background-color: #ff9900; -fx-text-fill: white;" text="Volver al Menú" />
+                <Button maxWidth="250" onAction="#actionBuscarSalas" style="-fx-background-color: #004a99; -fx-text-fill: white;" text="Buscar Salas Disponibles" />
+                <Button maxWidth="250" onAction="#actionVolverMenu" style="-fx-background-color: #ff9900; -fx-text-fill: white;" text="Volver al Menú" />
             </VBox>
 
             <!-- Lado derecho: Tabla -->
             <VBox alignment="TOP_RIGHT" spacing="10">
                 <Label style="-fx-font-size: 16px; -fx-text-fill: #004a99;" text="Salas Disponibles:" />
-                <TableView fx:id="tableSalasDisponibles" prefHeight="500" prefWidth="400">
+                <TableView fx:id="tableSalasDisponibles" prefHeight="193.0" prefWidth="400">
                     <columns>
                         <TableColumn fx:id="colIdSala" prefWidth="64.79998779296875" text="ID" />
                         <TableColumn fx:id="colNombreSala" prefWidth="124.00006103515625" text="Nombre" />
@@ -64,6 +67,16 @@
                         <TableColumn fx:id="colCapacidadSala" prefWidth="88.7999267578125" text="Capacidad" />
                     </columns>
                 </TableView>
+            <Label text="Equipos Disponibles:" />
+            <TableView fx:id="tableEquiposDisponibles" prefHeight="200.0" prefWidth="200.0">
+              <columns>
+                <TableColumn fx:id="colIdEquipo" prefWidth="75.0" text="ID" />
+                <TableColumn fx:id="colTipoEquipo" prefWidth="83.20001220703125" text="Tipo" />
+                  <TableColumn fx:id="colMarcaEquipo" prefWidth="116.0" text="Marca" />
+                  <TableColumn fx:id="colSoftwareEquipo" prefWidth="115.20001220703125" text="Software" />
+              </columns>
+            </TableView>
+            <Button maxWidth="250" onAction="#actionReservar" style="-fx-background-color: #004a99; -fx-text-fill: white;" text="Reservar Sala" />
             </VBox>
 
         </HBox>

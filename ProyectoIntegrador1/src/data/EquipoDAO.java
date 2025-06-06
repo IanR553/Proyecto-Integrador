@@ -256,10 +256,4 @@ public class EquipoDAO implements CRUD_operaciones<Equipo, String> {
 	    return lista;
 	}
 
-
-
-
-
-
-
 }

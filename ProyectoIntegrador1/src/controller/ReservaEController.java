@@ -52,6 +52,16 @@ public class ReservaEController {
         ObservableList<ReservaEquipo> lista = FXCollections.observableArrayList(reservas);
         tableReservas.setItems(lista);
     }
+    
+    public void eliminarReserva() {
+    	ReservaEquipo seleccionado = tableReservas.getSelectionModel().getSelectedItem();
+        if (seleccionado == null) {
+            Main.showAlert("Debe seleccionar un equipo para actualizar.", "Sin selección", Alert.AlertType.WARNING);
+            return;
+        }
+    	reservaEquipoDAO.delete(seleccionado.getIdReserva(), seleccionado.getIdEquipo());
+    	cargarReservas();
+    }
 }
 
 

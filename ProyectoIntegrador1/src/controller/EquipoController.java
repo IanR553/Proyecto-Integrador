@@ -19,10 +19,8 @@ import application.Main;
 import java.sql.Connection;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.TextStyle;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+
 
 public class EquipoController {
 
@@ -153,7 +151,7 @@ public class EquipoController {
             horaInicio = LocalTime.parse(horaInicioStr);
             horaFin = LocalTime.parse(horaFinStr);
         } catch (Exception e) {
-            Main.showAlert("Formato de hora incorrecto. Use HH:mm (ej. 14:30).", "Error de formato", Alert.AlertType.ERROR);
+            Main.showAlert("Formato de hora incorrecto. Use HH:mm (ej. 14:00).", "Error de formato", Alert.AlertType.ERROR);
             return;
         }
 
@@ -194,7 +192,7 @@ public class EquipoController {
         Reserva reservaEqui = new Reserva("Pendiente", "Equipo", cedula, idHorario);
         reservaDAO.save(reservaEqui);
         
-        String idReserva = reservaDAO.traerIdPorCedulaYHorario(reservaEqui.getCedUsuario(), reservaEqui.getIdHorario());
+        String idReserva = reservaDAO.traerIdPorCedulaYHorario(reservaEqui.getCedUsuario(), reservaEqui.getIdHorario(),reservaEqui.getTipo());
         
         ReservaEquipo equipoReservado = new ReservaEquipo(idReserva,seleccionado.getId());
         boolean exito = reservaEquipoDAO.save(equipoReservado);
@@ -211,8 +209,17 @@ public class EquipoController {
     
     @FXML
     private void regresarMenu() {
-    	Main.loadView("/view/ReservaE.fxml");
+        String rol = UserSession.getInstance().getRole();
+
+        if (rol.equals("Estudiante")) {
+            Main.loadView("/view/ReservaE.fxml");
+        } else if (rol.equals("Profesor") || rol.equals("Administrativo")) {
+            Main.loadView("/view/ReservaU.fxml");
+        } else {
+            Main.loadView("/view/GestionR.fxml");
+        }
     }
+
 }
 
 

@@ -1,88 +1,113 @@
 package controller;
 
 import data.DBConnectionFactory;
-import data.ReservaDAO;
+import data.ReservaEquipoDAO;
+import data.ReservaSalaDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import model.Reserva;
+import javafx.scene.control.cell.PropertyValueFactory;
+import model.ReservaEquipo;
+import model.ReservaSala;
 import data.UserSession;
 import application.Main;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 
 public class ReservaUController {
 
-    @FXML private TableView<Reserva> tableSalas;
-    @FXML private TableColumn<Reserva, String> colIdSala;
-    @FXML private TableColumn<Reserva, String> colNombreSala;
+    @FXML private TableView<ReservaSala> tableSalas;
+	@FXML private TableColumn<ReservaSala, String> colTipoS;
+	@FXML private TableColumn<ReservaSala, String> colEstadoSala;
+	@FXML private TableColumn<ReservaSala, String> colNombreSala;
+	@FXML private TableColumn<ReservaSala, String> colSoftwareSala;
+	@FXML private TableColumn<ReservaSala, String> colUbicacionSala;
+	@FXML private TableColumn<ReservaSala, Integer> colCapacidadSala;
 
-    @FXML private TableView<Reserva> tableEquipos;
-    @FXML private TableColumn<Reserva, String> colIdEquipo;
-    @FXML private TableColumn<Reserva, String> colNombreEquipo;
+    @FXML private TableView<ReservaEquipo> tableEquipos;
+	@FXML private TableColumn<ReservaEquipo, String> colTipoE;
+	@FXML private TableColumn<ReservaEquipo, String> colEstadoEquipo;
+	@FXML private TableColumn<ReservaEquipo, String> colTipoEquipo;
+	@FXML private TableColumn<ReservaEquipo, String> colMarcaEquipo;
+	@FXML private TableColumn<ReservaEquipo, String> colSoftwareEquipo;
 
-    @FXML private Button btnReservaSala;
-    @FXML private Button btnReservaEquipo;
-    @FXML private Button btnEliminar;
-    @FXML private Button btnModificar;
-    @FXML private Button btnCerrarSesion;
 
-    private Connection connection;
-    private ReservaDAO reservaDAO;
-    private ObservableList<Reserva> reservasSalas;
-    private ObservableList<Reserva> reservasEquipos;
-
+    private Connection connection = DBConnectionFactory.getConnectionByRole(UserSession.getInstance().getRole()).getConnection();
+    private ReservaEquipoDAO reservaEquipoDAO = new ReservaEquipoDAO(connection);
+    private ReservaSalaDAO reservaSalaDAO = new ReservaSalaDAO(connection);
+    
     @FXML
     public void initialize() {
-        String rol = UserSession.getInstance().getRole();
-        connection = DBConnectionFactory.getConnectionByRole(rol).getConnection();
-        reservaDAO = new ReservaDAO(connection);
-
-        configurarColumnas();
+    	
+    	colTipoS.setCellValueFactory(new PropertyValueFactory<>("tipo"));
+    	colEstadoSala.setCellValueFactory(new PropertyValueFactory<>("estado"));
+    	colNombreSala.setCellValueFactory(new PropertyValueFactory<>("nombreSala"));
+    	colSoftwareSala.setCellValueFactory(new PropertyValueFactory<>("softwareSala"));
+    	colUbicacionSala.setCellValueFactory(new PropertyValueFactory<>("ubicacionSala"));
+    	colCapacidadSala.setCellValueFactory(new PropertyValueFactory<>("capacidadSala"));
+    	
+    	colTipoE.setCellValueFactory(new PropertyValueFactory<>("tipo"));
+    	colEstadoEquipo.setCellValueFactory(new PropertyValueFactory<>("estado"));
+    	colTipoEquipo.setCellValueFactory(new PropertyValueFactory<>("tipoEquipo"));
+    	colMarcaEquipo.setCellValueFactory(new PropertyValueFactory<>("marca"));
+    	colSoftwareEquipo.setCellValueFactory(new PropertyValueFactory<>("software"));
+    	
         cargarReservas();
     }
 
-    private void configurarColumnas() {
-        colIdSala.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getId()));
-        //colNombreSala.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getNombre()));
-
-        colIdEquipo.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getId()));
-        //colNombreEquipo.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getNombre()));
-    }
-
     private void cargarReservas() {
-        String username = UserSession.getInstance().getUsername();
-
-       // reservasSalas = FXCollections.observableArrayList(reservaDAO.obtenerReservasPorUsuario(username, "sala"));
-       // reservasEquipos = FXCollections.observableArrayList(reservaDAO.obtenerReservasPorUsuario(username, "equipo"));
-
-        tableSalas.setItems(reservasSalas);
-        tableEquipos.setItems(reservasEquipos);
+        long cedula = Long.parseLong(UserSession.getInstance().getUsername());
+        ArrayList<ReservaEquipo> reservasEquipo = reservaEquipoDAO.obtenerReservasConEquiposPorUsuario(cedula);
+        ArrayList<ReservaSala> reservasSala = reservaSalaDAO.obtenerReservasSalasPorUsuario(cedula);
+        ObservableList<ReservaEquipo> listaEquipos = FXCollections.observableArrayList(reservasEquipo);
+        ObservableList<ReservaSala> listaSalas = FXCollections.observableArrayList(reservasSala);
+        tableSalas.setItems(listaSalas);
+        tableEquipos.setItems(listaEquipos);
     }
 
     @FXML
-    private void handleReservarSala() {
+    private void actionReservarSala() {
         Main.loadView("/view/sala.fxml");
     }
 
     @FXML
-    private void handleReservarEquipo() {
+    private void actionReservarEquipo() {
         Main.loadView("/view/Equipo.fxml");
     }
 
     @FXML
-    private void handleEliminar() {
-        cargarReservas(); 
+    private void actionEliminarReserva() {
+        ReservaSala seleccionadoSala = tableSalas.getSelectionModel().getSelectedItem();
+        ReservaEquipo seleccionadoEquipo = tableEquipos.getSelectionModel().getSelectedItem();
+
+        if (seleccionadoSala == null && seleccionadoEquipo == null) {
+            Main.showAlert("Debe seleccionar una reserva de sala o de equipo para eliminar.", "Sin selección", Alert.AlertType.WARNING);
+            return;
+        }
+
+        if (seleccionadoSala != null) {
+            reservaSalaDAO.delete(seleccionadoSala.getIdReserva(), seleccionadoSala.getIdSala(), seleccionadoSala.getIdEquipo());
+            System.out.println("Eliminando reserva: idReserva=" + seleccionadoSala.getIdReserva() + ", idSala=" + seleccionadoSala.getIdSala() + ", idEquipo=" + seleccionadoSala.getIdEquipo());
+        }
+
+        if (seleccionadoEquipo != null) {
+            reservaEquipoDAO.delete(seleccionadoEquipo.getIdReserva(), seleccionadoEquipo.getIdEquipo());
+            
+        }
+
+        cargarReservas();
     }
+
     
     @FXML
-    private void handleModificar() {
+    private void actionModificarReserva() {
         cargarReservas(); 
     }
 
     @FXML
-    private void handleCerrarSesion() {
+    private void actionCerrarSesion() {
         UserSession.getInstance().destroy();
         Main.loadView("/view/Login.fxml");
     }
