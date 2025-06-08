@@ -1,6 +1,6 @@
-# Ejemplo para crear y cargar excel 
+# Proyecto Integrador 1 Ingenieria de Sistemas 
 ## Descripción
-Es un software para registrar equipos en base a un excel.
+Es un software para realizar reservas de salas informaticas y equipos.
 
 ## Lenguaje de desarollo:
 - Java
