@@ -1,6 +1,7 @@
 package controller;
 
 import data.DBConnectionFactory;
+import data.ReservaDAO;
 import data.ReservaEquipoDAO;
 import data.ReservaSalaDAO;
 import javafx.collections.FXCollections;
@@ -37,6 +38,7 @@ public class ReservaUController {
     private Connection connection = DBConnectionFactory.getConnectionByRole(UserSession.getInstance().getRole()).getConnection();
     private ReservaEquipoDAO reservaEquipoDAO = new ReservaEquipoDAO(connection);
     private ReservaSalaDAO reservaSalaDAO = new ReservaSalaDAO(connection);
+    private ReservaDAO reservaDAO = new ReservaDAO(connection);
     
     @FXML
     public void initialize() {
@@ -87,14 +89,24 @@ public class ReservaUController {
             return;
         }
 
+        boolean reservaEliminada = false;
+
         if (seleccionadoSala != null) {
             reservaSalaDAO.delete(seleccionadoSala.getIdReserva(), seleccionadoSala.getIdSala(), seleccionadoSala.getIdEquipo());
-            System.out.println("Eliminando reserva: idReserva=" + seleccionadoSala.getIdReserva() + ", idSala=" + seleccionadoSala.getIdSala() + ", idEquipo=" + seleccionadoSala.getIdEquipo());
+            System.out.println("Eliminando reserva de sala: idReserva=" + seleccionadoSala.getIdReserva());
+            // Verifica si no hay otra reserva de equipo asociada a esta reserva
+            if (!reservaEquipoDAO.existePorIdReserva(seleccionadoSala.getIdReserva())) {
+                reservaDAO.delete(seleccionadoSala.getIdReserva());
+                reservaEliminada = true;
+            }
         }
 
         if (seleccionadoEquipo != null) {
             reservaEquipoDAO.delete(seleccionadoEquipo.getIdReserva(), seleccionadoEquipo.getIdEquipo());
-            
+            System.out.println("Eliminando reserva de equipo: idReserva=" + seleccionadoEquipo.getIdReserva());
+            if (!reservaSalaDAO.existePorIdReserva(seleccionadoEquipo.getIdReserva()) && !reservaEliminada) {
+                reservaDAO.delete(seleccionadoEquipo.getIdReserva());
+            }
         }
 
         cargarReservas();

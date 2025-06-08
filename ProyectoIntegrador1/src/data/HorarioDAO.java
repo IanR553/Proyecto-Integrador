@@ -1,13 +1,16 @@
 package data;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
+import java.sql.Types;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import oracle.jdbc.OracleTypes;
 
 import model.Horario;
 
@@ -105,25 +108,28 @@ public class HorarioDAO implements CRUD_operaciones<Horario, String> {
 	}
 
 	public String traerIdHorario(int semana, String dia, LocalTime horaInicio, LocalTime horaFin) {
-		String sql = "SELECT id FROM PI1SIDS.Horario " + "WHERE semana = ? AND dia = ? "
-				+ "AND TO_CHAR(horainicio, 'HH24:MI') = ? " + "AND TO_CHAR(horafin, 'HH24:MI') = ?";
+	    String idHorario = null;
+	    String call = "{ ? = call PI1SIDS.obtener_id_horario(?, ?, ?, ?) }";
 
-		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-			stmt.setInt(1, semana);
-			stmt.setString(2, dia);
-			stmt.setString(3, horaInicio.toString()); // "14:00"
-			stmt.setString(4, horaFin.toString()); // "16:00"
+	    try (CallableStatement cstmt = connection.prepareCall(call)) {
+	        cstmt.registerOutParameter(1, Types.VARCHAR);
+	        cstmt.setInt(2, semana);
+	        cstmt.setString(3, dia);
 
-			ResultSet rs = stmt.executeQuery();
+	        Time sqlHoraInicio = Time.valueOf(horaInicio);
+	        Time sqlHoraFin = Time.valueOf(horaFin);
 
-			if (rs.next()) {
-				return rs.getString("id");
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	        cstmt.setTime(4, sqlHoraInicio);
+	        cstmt.setTime(5, sqlHoraFin);
 
-		return null;
+	        cstmt.execute();
+	        idHorario = cstmt.getString(1);
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return idHorario;
 	}
+
 
 }

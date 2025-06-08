@@ -1,15 +1,17 @@
 package data;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import oracle.jdbc.OracleTypes;
 
 import model.Usuario;
 
-public class UsuarioDAO implements CRUD_operaciones<Usuario, Long>{
+public class UsuarioDAO implements CRUD_operaciones<Usuario, Long> {
 
 	private Connection connection;
 
@@ -17,49 +19,53 @@ public class UsuarioDAO implements CRUD_operaciones<Usuario, Long>{
 		this.connection = connection;
 	}
 
-    @Override
+	@Override
 	public void save(Usuario usuario) {
-		String query = "INSERT INTO PI1SIDS.Usuario (cedula, primerNombre, segundoNombre, primerApellido, segundoApellido, correoElectronico, celular, idRol, contraseña) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	    String call = "{call PI1SIDS.insertar_usuario(?, ?, ?, ?, ?, ?, ?, ?, ?)}";
 
-		try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-			pstmt.setLong(1, usuario.getCedula());
-			pstmt.setString(2, usuario.getPrimerNombre());
-			pstmt.setString(3, usuario.getSegundoNombre());
-			pstmt.setString(4, usuario.getPrimerApellido());
-			pstmt.setString(5, usuario.getSegundoApellido());
-			pstmt.setString(6, usuario.getCorreoElectronico());
-			pstmt.setLong(7, usuario.getCelular());
-			pstmt.setString(8, usuario.getidRol());
-			pstmt.setString(9, usuario.getContraseña());
+	    try (CallableStatement stmt = connection.prepareCall(call)) {
+	        stmt.setLong(1, usuario.getCedula());
+	        stmt.setString(2, usuario.getPrimerNombre());
+	        stmt.setString(3, usuario.getSegundoNombre());
+	        stmt.setString(4, usuario.getPrimerApellido());
+	        stmt.setString(5, usuario.getSegundoApellido());
+	        stmt.setString(6, usuario.getCorreoElectronico());
+	        stmt.setLong(7, usuario.getCelular());
+	        stmt.setString(8, usuario.getidRol());
+	        stmt.setString(9, usuario.getContraseña());
 
-			pstmt.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	        stmt.execute();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
 	}
 
-    @Override
+
+	@Override
 	public ArrayList<Usuario> fetch() {
 		ArrayList<Usuario> usuarios = new ArrayList<>();
-		String query = "SELECT u.cedula, u.primerNombre, u.segundoNombre, u.primerApellido, u.segundoApellido, "
-				+ "u.correoElectronico, u.celular, u.idRol, u.contraseña " + "FROM PI1SIDS.Usuario u";
+		String sql = "{ ? = call PI1SIDS.obtener_usuarios() }";
 
-		try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
+		try (CallableStatement cstmt = connection.prepareCall(sql)) {
+			cstmt.registerOutParameter(1, oracle.jdbc.OracleTypes.CURSOR);
+			cstmt.execute();
 
-			while (rs.next()) {
-				Long cedula = rs.getLong("cedula");
-				String primerNombre = rs.getString("primerNombre");
-				String segundoNombre = rs.getString("segundoNombre");
-				String primerApellido = rs.getString("primerApellido");
-				String segundoApellido = rs.getString("segundoApellido");
-				String correoElectronico = rs.getString("correoElectronico");
-				Long celular = rs.getLong("celular");
-				String idRol = rs.getString("idRol");
-				String contraseña = rs.getString("contraseña");
+			try (ResultSet rs = (ResultSet) cstmt.getObject(1)) {
+				while (rs.next()) {
+					Long cedula = rs.getLong("cedula");
+					String primerNombre = rs.getString("primerNombre");
+					String segundoNombre = rs.getString("segundoNombre");
+					String primerApellido = rs.getString("primerApellido");
+					String segundoApellido = rs.getString("segundoApellido");
+					String correoElectronico = rs.getString("correoElectronico");
+					Long celular = rs.getLong("celular");
+					String idRol = rs.getString("idRol");
+					String contraseña = rs.getString("contrasena");
 
-				Usuario usuario = new Usuario(cedula, primerNombre, segundoNombre, primerApellido, segundoApellido,
-						correoElectronico, celular, idRol, contraseña);
-				usuarios.add(usuario);
+					Usuario usuario = new Usuario(cedula, primerNombre, segundoNombre, primerApellido, segundoApellido,
+							correoElectronico, celular, idRol, contraseña);
+					usuarios.add(usuario);
+				}
 			}
 
 		} catch (SQLException e) {
@@ -69,73 +75,80 @@ public class UsuarioDAO implements CRUD_operaciones<Usuario, Long>{
 		return usuarios;
 	}
 
-    @Override
+	@Override
 	public void update(Usuario usuario) {
-		String query = "UPDATE PI1SIDS.Usuario SET primerNombre=?, segundoNombre=?, primerApellido=?, segundoApellido=?, correoElectronico=?, celular=?, idRol=?, contraseña=? WHERE cedula=?";
+	    String call = "{call PI1SIDS.actualizar_usuario(?, ?, ?, ?, ?, ?, ?, ?, ?)}";
 
-		try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-			pstmt.setString(1, usuario.getPrimerNombre());
-			pstmt.setString(2, usuario.getSegundoNombre());
-			pstmt.setString(3, usuario.getPrimerApellido());
-			pstmt.setString(4, usuario.getSegundoApellido());
-			pstmt.setString(5, usuario.getCorreoElectronico());
-			pstmt.setLong(6, usuario.getCelular());
-			pstmt.setString(7, usuario.getidRol());
-			pstmt.setString(8, usuario.getContraseña());
-			pstmt.setLong(9, usuario.getCedula());
+	    try (CallableStatement cstmt = connection.prepareCall(call)) {
+	        cstmt.setLong(1, usuario.getCedula());
+	        cstmt.setString(2, usuario.getPrimerNombre());
+	        cstmt.setString(3, usuario.getSegundoNombre());
+	        cstmt.setString(4, usuario.getPrimerApellido());
+	        cstmt.setString(5, usuario.getSegundoApellido());
+	        cstmt.setString(6, usuario.getCorreoElectronico());
+	        cstmt.setLong(7, usuario.getCelular());
+	        cstmt.setString(8, usuario.getidRol());
+	        cstmt.setString(9, usuario.getContraseña());
 
-			pstmt.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	        cstmt.execute();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
 	}
 
-    @Override
+
+	@Override
 	public void delete(Long cedula) {
-		String query = "DELETE FROM PI1SIDS.Usuario WHERE cedula=?";
+	    String call = "{call PI1SIDS.eliminar_usuario(?)}";
 
-		try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-			pstmt.setLong(1, cedula);
-			pstmt.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	    try (CallableStatement cstmt = connection.prepareCall(call)) {
+	        cstmt.setLong(1, cedula);
+	        cstmt.execute();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
 	}
-	
-    @Override
-    public boolean authenticate(Long cedula) {
-        String query = "SELECT cedula FROM PI1SIDS.Usuario WHERE cedula=?";
 
-        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setLong(1, cedula); 
-            ResultSet rs = pstmt.executeQuery();
 
-            if (rs.next()) {
-                return rs.getLong("cedula") == cedula; 
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+	@Override
+	public boolean authenticate(Long cedula) {
+		boolean existe = false;
+		String sql = "{ ? = call PI1SIDS.autenticar_cedula(?) }";
 
-        return false;
-    }
-    
-	public boolean authenticate(Long cedula, String contraseña, String rol) {
-
-		String sql = "SELECT * FROM PI1SIDS.Usuario WHERE cedula=? AND contraseña=? AND idrol=?";
-
-		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-			stmt.setLong(1, cedula);
-			stmt.setString(2, contraseña);
-			stmt.setString(3, rol);
-			ResultSet rs = stmt.executeQuery();
-			if (rs.next()) {
-				return rs.getLong("cedula") == cedula && rs.getString("contraseña").equals(contraseña)
-						&& rs.getString("idrol").equals(rol);
-			}
+		try (CallableStatement cstmt = connection.prepareCall(sql)) {
+			cstmt.registerOutParameter(1, java.sql.Types.NUMERIC);
+			cstmt.setLong(2, cedula);
+			cstmt.execute();
+			int resultado = cstmt.getInt(1);
+			existe = (resultado == 1);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return existe;
+	}
+
+	public boolean authenticate(Long cedula, String contrasena, String rol) {
+		String sql = "{ ? = call PI1SIDS.autenticar_usuario(?, ?, ?) }";
+
+		try (CallableStatement stmt = connection.prepareCall(sql)) {
+			// Registramos el parámetro de retorno
+			stmt.registerOutParameter(1, java.sql.Types.INTEGER);
+
+			// Seteamos los parámetros de entrada
+			stmt.setLong(2, cedula);
+			stmt.setString(3, contrasena);
+			stmt.setString(4, rol);
+
+			// Ejecutamos la función
+			stmt.execute();
+
+			// Obtenemos el resultado
+			int resultado = stmt.getInt(1);
+			return resultado == 1;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 		return false;
 	}
 

@@ -5,7 +5,7 @@ module enrollmentSoftware {
 	requires javafx.base;
 	requires java.base;
 	requires javafx.graphics;
-	
+	requires com.oracle.database.jdbc;
 	
 	opens controller;
 	opens application to javafx.graphics, javafx.fxml;

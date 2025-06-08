@@ -1,13 +1,16 @@
 package data;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 
 import model.ReservaEquipo;
 import model.ReservaSala;
+import oracle.jdbc.OracleTypes;
 
 public class ReservaSalaDAO {
 
@@ -18,19 +21,23 @@ public class ReservaSalaDAO {
     }
 
     public boolean save(ReservaSala rs) {
-        String query = "INSERT INTO PI1SIDS.reserva_sala (id_reserva, id_sala, id_equipo) VALUES (?, ?, ?)";
+        String call = "{ ? = call PI1SIDS.save_reserva_sala(?, ?, ?) }";
 
-        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setString(1, rs.getIdReserva());
-            pstmt.setString(2, rs.getIdSala());
-            pstmt.setString(3, rs.getIdEquipo());
-            pstmt.executeUpdate();
-            return true;
+        try (CallableStatement cstmt = connection.prepareCall(call)) {
+            cstmt.registerOutParameter(1, Types.INTEGER);
+            cstmt.setString(2, rs.getIdReserva());
+            cstmt.setString(3, rs.getIdSala());
+            cstmt.setString(4, rs.getIdEquipo());
+
+            cstmt.execute();
+            int resultado = cstmt.getInt(1);
+            return resultado == 1;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
     }
+
 
     public ArrayList<ReservaSala> fetch() {
         ArrayList<ReservaSala> lista = new ArrayList<>();
@@ -69,30 +76,26 @@ public class ReservaSalaDAO {
     }
 
     public void delete(String idReserva, String idSala, String idEquipo) {
-        String query;
-        boolean equipoEsNull = (idEquipo == null || idEquipo.trim().isEmpty());
+        String call = "{ call PI1SIDS.delete_reserva_sala(?, ?, ?) }";
 
-        if (equipoEsNull) {
-            query = "DELETE FROM PI1SIDS.reserva_sala WHERE id_reserva = ? AND id_sala = ? AND id_equipo IS NULL";
-        } else {
-            query = "DELETE FROM PI1SIDS.reserva_sala WHERE id_reserva = ? AND id_sala = ? AND id_equipo = ?";
-        }
+        try (CallableStatement cstmt = connection.prepareCall(call)) {
+            cstmt.setString(1, idReserva);
+            cstmt.setString(2, idSala);
 
-        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setString(1, idReserva);
-            pstmt.setString(2, idSala);
-
-            if (!equipoEsNull) {
-                pstmt.setString(3, idEquipo);
+            if (idEquipo == null || idEquipo.trim().isEmpty()) {
+                cstmt.setNull(3, Types.VARCHAR);
+            } else {
+                cstmt.setString(3, idEquipo);
             }
 
-            int filas = pstmt.executeUpdate();
-            System.out.println("Filas eliminadas: " + filas);
+            cstmt.execute();
+            System.out.println("Reserva sala eliminada correctamente.");
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
 
 
 
@@ -114,41 +117,55 @@ public class ReservaSalaDAO {
 
     public ArrayList<ReservaSala> obtenerReservasSalasPorUsuario(long cedulaUsuario) {
         ArrayList<ReservaSala> lista = new ArrayList<>();
+        String call = "{ ? = call PI1SIDS.get_reservas_salas_por_usuario(?) }";
 
-        String sql = """
-        	    SELECT r.id AS id_reserva, r.tipo, r.estado,
-        	           s.id AS id_sala, s.nombre, s.capacidad, s.ubicacion, s.software,
-        	           rs.id_equipo
-        	    FROM PI1SIDS.reserva r
-        	    JOIN PI1SIDS.reserva_sala rs ON r.id = rs.id_reserva
-        	    JOIN PI1SIDS.sala s ON rs.id_sala = s.id
-        	    WHERE r.cedusuario = ?
-        	""";
+        try (CallableStatement cstmt = connection.prepareCall(call)) {
+            cstmt.registerOutParameter(1, OracleTypes.CURSOR);
+            cstmt.setLong(2, cedulaUsuario);
+            cstmt.execute();
 
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setLong(1, cedulaUsuario);
-            ResultSet rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                ReservaSala reservaSala = new ReservaSala(
-                    rs.getString("id_reserva"),
-                    rs.getString("tipo"),
-                    rs.getString("estado"),
-                    rs.getString("id_sala"),
-                    rs.getString("nombre"),
-                    rs.getInt("capacidad"),
-                    rs.getString("ubicacion"),
-                    rs.getString("software")
-                );
-                reservaSala.setIdEquipo(rs.getString("id_equipo"));
-                lista.add(reservaSala);
+            try (ResultSet rs = (ResultSet) cstmt.getObject(1)) {
+                while (rs.next()) {
+                    ReservaSala reservaSala = new ReservaSala(
+                        rs.getString("id_reserva"),
+                        rs.getString("tipo"),
+                        rs.getString("estado"),
+                        rs.getString("id_sala"),
+                        rs.getString("nombre"),
+                        rs.getInt("capacidad"),
+                        rs.getString("ubicacion"),
+                        rs.getString("software")
+                    );
+                    reservaSala.setIdEquipo(rs.getString("id_equipo"));
+                    lista.add(reservaSala);
+                }
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         return lista;
     }
+
+    public boolean existePorIdReserva(String idReserva) {
+        String call = "{ ? = call PI1SIDS.existe_reserva_sala(?) }";
+
+        try (CallableStatement cstmt = connection.prepareCall(call)) {
+            cstmt.registerOutParameter(1, Types.INTEGER);
+            cstmt.setString(2, idReserva);
+
+            cstmt.execute();
+            int resultado = cstmt.getInt(1);
+            return resultado > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+
 
 }
 

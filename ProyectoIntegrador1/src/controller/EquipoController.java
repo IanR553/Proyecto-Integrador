@@ -195,6 +195,7 @@ public class EquipoController {
         String idReserva = reservaDAO.traerIdPorCedulaYHorario(reservaEqui.getCedUsuario(), reservaEqui.getIdHorario(),reservaEqui.getTipo());
         
         ReservaEquipo equipoReservado = new ReservaEquipo(idReserva,seleccionado.getId());
+        
         boolean exito = reservaEquipoDAO.save(equipoReservado);
 
 

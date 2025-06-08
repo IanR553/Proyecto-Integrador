@@ -14,19 +14,20 @@ public class ReservaDAO implements CRUD_operaciones<Reserva, String> {
 
     @Override
     public void save(Reserva reserva) {
-        String sql = "INSERT INTO PI1SIDS.Reserva (estado, tipo, cedUsuario, idHorario) VALUES (?, ?, ?, ?)";
+        String call = "{ call PI1SIDS.insertar_reserva(?, ?, ?, ?) }";
 
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setString(1, reserva.getEstado());
-            pstmt.setString(2, reserva.getTipo());
-            pstmt.setLong(3, reserva.getCedUsuario());
-            pstmt.setString(4, reserva.getIdHorario());
+        try (CallableStatement cstmt = connection.prepareCall(call)) {
+            cstmt.setString(1, reserva.getEstado());
+            cstmt.setString(2, reserva.getTipo());
+            cstmt.setLong(3, reserva.getCedUsuario());
+            cstmt.setString(4, reserva.getIdHorario());
 
-            pstmt.executeUpdate();
+            cstmt.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
 
 
     @Override
@@ -74,15 +75,16 @@ public class ReservaDAO implements CRUD_operaciones<Reserva, String> {
 
     @Override
     public void delete(String id) {
-        String sql = "DELETE FROM PI1SIDS.Reserva WHERE id = ?";
+        String call = "{ call PI1SIDS.eliminar_reserva(?) }";
 
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setString(1, id);
-            pstmt.executeUpdate();
+        try (CallableStatement cstmt = connection.prepareCall(call)) {
+            cstmt.setString(1, id);
+            cstmt.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
 
     @Override
     public boolean authenticate(String id) {
@@ -101,23 +103,24 @@ public class ReservaDAO implements CRUD_operaciones<Reserva, String> {
     
 
     public String traerIdPorCedulaYHorario(long cedula, String idHorario, String tipo) {
-        String sql = "SELECT id FROM PI1SIDS.Reserva WHERE cedUsuario = ? AND idHorario = ? AND tipo = ?";
+        String idReserva = null;
+        String call = "{ ? = call PI1SIDS.traer_id_reserva(?, ?, ?) }";
 
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setLong(1, cedula);
-            pstmt.setString(2, idHorario);
-            pstmt.setString(3, tipo);
+        try (CallableStatement cstmt = connection.prepareCall(call)) {
+            cstmt.registerOutParameter(1, Types.VARCHAR);
+            cstmt.setLong(2, cedula);
+            cstmt.setString(3, idHorario);
+            cstmt.setString(4, tipo);
 
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                return rs.getString("id");
-            }
+            cstmt.execute();
+            idReserva = cstmt.getString(1);
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return null; 
+        return idReserva;
     }
+
 
 }
 

@@ -2,6 +2,7 @@ package controller;
 
 import application.Main;
 import data.DBConnectionFactory;
+import data.ReservaDAO;
 import data.ReservaEquipoDAO;
 import data.UserSession;
 import javafx.collections.FXCollections;
@@ -28,6 +29,7 @@ public class ReservaEController {
 
     private Connection connection = DBConnectionFactory.getConnectionByRole(UserSession.getInstance().getRole()).getConnection();
     private ReservaEquipoDAO reservaEquipoDAO = new ReservaEquipoDAO(connection);
+    private ReservaDAO reservaDAO = new ReservaDAO(connection);
 
     @FXML
     public void initialize() {
@@ -59,7 +61,9 @@ public class ReservaEController {
             Main.showAlert("Debe seleccionar un equipo para actualizar.", "Sin selección", Alert.AlertType.WARNING);
             return;
         }
-    	reservaEquipoDAO.delete(seleccionado.getIdReserva(), seleccionado.getIdEquipo());
+        
+        reservaEquipoDAO.delete(seleccionado.getIdReserva(), seleccionado.getIdEquipo());
+        reservaDAO.delete(seleccionado.getIdReserva());
     	cargarReservas();
     }
 }
