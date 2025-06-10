@@ -213,71 +213,15 @@ public class SalaController {
 	    Integer semana = comBoxSemana.getValue();
 	    String tipoEquipo = comBoxEquipo.getValue();
 
-	    LocalTime horaInicio;
-	    LocalTime horaFin;
-
-	    try {
-	        horaInicio = LocalTime.parse(horaInicioStr);
-	        horaFin = LocalTime.parse(horaFinStr);
-	    } catch (Exception e) {
-	        Main.showAlert("Formato de hora incorrecto. Use HH:mm (ej. 14:00).", "Error de formato",
-	                Alert.AlertType.ERROR);
-	        return;
-	    }
-
-	    String diaSemana = switch (fechaSeleccionada.getDayOfWeek()) {
-	        case MONDAY -> "lunes";
-	        case TUESDAY -> "martes";
-	        case WEDNESDAY -> "miercoles";
-	        case THURSDAY -> "jueves";
-	        case FRIDAY -> "viernes";
-	        case SATURDAY -> "sabado";
-	        case SUNDAY -> "domingo";
-	    };
-
-	    String idHorario = horarioDAO.traerIdHorario(semana, diaSemana, horaInicio, horaFin);
-
-	    if (idHorario == null) {
-	        Main.showAlert("No se encontró un horario con los datos proporcionados.", "Horario no encontrado", Alert.AlertType.WARNING);
-	        return;
-	    }
-
-	    long cedula = Long.parseLong(UserSession.getInstance().getUsername());
 	    Sala salaSeleccionada = tableSalasDisponibles.getSelectionModel().getSelectedItem();
 	    Equipo equipoSeleccionado = tableEquiposDisponibles.getSelectionModel().getSelectedItem();
 
-	    if (salaSeleccionada == null) {
-	        Main.showAlert("Debe seleccionar una sala para reservar.", "Sin selección", Alert.AlertType.WARNING);
-	        return;
-	    }
+	    ReservaFacade reservaFacade = new ReservaFacade(horarioDAO, reservaDAO, reservaSalaDAO, reservaEquipoDAO);
+	    boolean exito = reservaFacade.realizarReserva(horaInicioStr, horaFinStr, fechaSeleccionada, semana,
+	                                                  tipoEquipo, salaSeleccionada, equipoSeleccionado);
 
-	    if (!"NINGUNO".equalsIgnoreCase(tipoEquipo) && equipoSeleccionado == null) {
-	        Main.showAlert("Debe seleccionar un equipo para reservar.", "Sin selección", Alert.AlertType.WARNING);
-	        return;
-	    }
-
-	    // Crear única reserva
-	    Reserva reserva = new Reserva("Pendiente", "Sala", cedula, idHorario);
-	    reservaDAO.save(reserva);
-
-	    String idReserva = reservaDAO.traerIdPorCedulaYHorario(reserva.getCedUsuario(), reserva.getIdHorario(), reserva.getTipo());
-
-	    // Si se seleccionó un equipo, se asigna; de lo contrario, va null
-	    String idEquipo = "NINGUNO".equalsIgnoreCase(tipoEquipo) ? null : equipoSeleccionado.getId();
-
-	    ReservaSala reservaSala = new ReservaSala(idReserva, salaSeleccionada.getId(), idEquipo);
-	    
-	    if (!"NINGUNO".equalsIgnoreCase(tipoEquipo) && equipoSeleccionado != null) {
-	        ReservaEquipo reservaEquipo = new ReservaEquipo(idReserva, equipoSeleccionado.getId());
-	        reservaEquipoDAO.save(reservaEquipo);
-
-	    }
-
-	    if (reservaSalaDAO.save(reservaSala)) {
-	        Main.showAlert("Reserva realizada exitosamente.", "Éxito", Alert.AlertType.INFORMATION);
+	    if (exito) {
 	        actionBuscarSalas();
-	    } else {
-	        Main.showAlert("No se pudo completar la reserva. Verifique disponibilidad o conflicto de horarios.", "Error", Alert.AlertType.ERROR);
 	    }
 	}
 
