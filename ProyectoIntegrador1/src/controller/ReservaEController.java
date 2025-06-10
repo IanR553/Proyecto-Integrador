@@ -40,12 +40,6 @@ public class ReservaEController {
         colSoftware.setCellValueFactory(new PropertyValueFactory<>("software"));
 
         cargarReservas();
-        
-        btnequipo.setOnAction(e -> Main.loadView("/view/Equipo.fxml"));
-        btnCerrarSesion.setOnAction(e -> {
-            UserSession.getInstance().destroy();
-            Main.loadView("/view/Login.fxml");
-        });
     }
 
     private void cargarReservas() {
@@ -53,6 +47,15 @@ public class ReservaEController {
         ArrayList<ReservaEquipo> reservas = reservaEquipoDAO.obtenerReservasConEquiposPorUsuario(cedula);
         ObservableList<ReservaEquipo> lista = FXCollections.observableArrayList(reservas);
         tableReservas.setItems(lista);
+    }
+    
+    public void reservarEquipo() {
+    	Main.loadView("/view/Equipo.fxml");
+    }
+    
+    public void cerrarSesion() {
+    	UserSession.getInstance().destroy();
+        Main.loadView("/view/Login.fxml");
     }
     
     public void eliminarReserva() {

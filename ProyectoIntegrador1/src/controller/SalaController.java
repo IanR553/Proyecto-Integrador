@@ -217,7 +217,7 @@ public class SalaController {
 	    Equipo equipoSeleccionado = tableEquiposDisponibles.getSelectionModel().getSelectedItem();
 
 	    ReservaFacade reservaFacade = new ReservaFacade(horarioDAO, reservaDAO, reservaSalaDAO, reservaEquipoDAO);
-	    boolean exito = reservaFacade.realizarReserva(horaInicioStr, horaFinStr, fechaSeleccionada, semana,
+	    boolean exito = reservaFacade.realizarReservaSala(horaInicioStr, horaFinStr, fechaSeleccionada, semana,
 	                                                  tipoEquipo, salaSeleccionada, equipoSeleccionado);
 
 	    if (exito) {

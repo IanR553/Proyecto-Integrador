@@ -5,7 +5,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -32,7 +31,7 @@
 					</font>
 				</Label>
 
-				<Button fx:id="btnequipo" layoutX="147.0" layoutY="70.0" maxWidth="250" prefHeight="35.0" prefWidth="204.0" style="-fx-background-color: #0073e6; -fx-text-fill: white;" text="Reservar Equipo">
+				<Button fx:id="btnequipo" layoutX="147.0" layoutY="70.0" maxWidth="250" onAction="#reservarEquipo" prefHeight="35.0" prefWidth="204.0" style="-fx-background-color: #0073e6; -fx-text-fill: white;" text="Reservar Equipo">
 					<cursor>
 						<Cursor fx:constant="HAND" />
 					</cursor>
@@ -56,7 +55,7 @@
 					</font>
 				</Label>
 
-				<Button fx:id="btnCerrarSesion" layoutX="212.0" layoutY="416.0" mnemonicParsing="false" style="-fx-background-color: #ff3333; -fx-text-fill: white;" text="Cerrar Sesión" />
+				<Button fx:id="btnCerrarSesion" layoutX="212.0" layoutY="416.0" mnemonicParsing="false" onAction="#cerrarSesion" style="-fx-background-color: #ff3333; -fx-text-fill: white;" text="Cerrar Sesión" />
             <Button layoutX="204.0" layoutY="374.0" mnemonicParsing="false" onAction="#eliminarReserva" text="Eliminar Reserva" />
 			</children>
 		</AnchorPane>

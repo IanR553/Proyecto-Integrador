@@ -131,18 +131,13 @@ public class UsuarioDAO implements CRUD_operaciones<Usuario, Long> {
 		String sql = "{ ? = call PI1SIDS.autenticar_usuario(?, ?, ?) }";
 
 		try (CallableStatement stmt = connection.prepareCall(sql)) {
-			// Registramos el parámetro de retorno
 			stmt.registerOutParameter(1, java.sql.Types.INTEGER);
 
-			// Seteamos los parámetros de entrada
 			stmt.setLong(2, cedula);
 			stmt.setString(3, contrasena);
 			stmt.setString(4, rol);
-
-			// Ejecutamos la función
 			stmt.execute();
 
-			// Obtenemos el resultado
 			int resultado = stmt.getInt(1);
 			return resultado == 1;
 		} catch (SQLException e) {

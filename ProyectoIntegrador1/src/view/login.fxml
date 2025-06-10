@@ -5,12 +5,11 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="406.0" prefWidth="419.0" style="-fx-background-color: beige;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.loginController">
+<BorderPane prefHeight="472.0" prefWidth="424.0" style="-fx-background-color: beige;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.loginController">
     <center>
         <VBox alignment="CENTER" maxHeight="300" maxWidth="400" spacing="15">
          <Label style="-fx-font-size: 20px; -fx-text-fill: #004a99;" text="Bienvenido" />
