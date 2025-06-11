@@ -173,7 +173,7 @@ public class EquipoController {
         } else if (rol.equals("Profesor") || rol.equals("Administrativo")) {
             Main.loadView("/view/ReservaU.fxml");
         } else {
-            Main.loadView("/view/GestionR.fxml");
+            Main.loadView("/view/GestionReservas.fxml");
         }
     }
 

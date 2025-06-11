@@ -42,7 +42,7 @@ public class AdminController {
 
     @FXML
     private void actionGestionarReservas() {
-    	Main.loadView("/view/Admin.fxml");
+    	Main.loadView("/view/GestionReservas.fxml");
     }
 
     @FXML

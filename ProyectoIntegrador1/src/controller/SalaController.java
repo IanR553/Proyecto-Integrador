@@ -228,7 +228,12 @@ public class SalaController {
 
     
     public void actionVolverMenu() {
-    	Main.loadView("/view/reservaU.fxml");
+    	String rol = UserSession.getInstance().getRole();
+    	if (rol.equals("Profesor") || rol.equals("Administrativo")) {
+            Main.loadView("/view/ReservaU.fxml");
+        } else {
+            Main.loadView("/view/GestionReservas.fxml");
+        }
     }
 }
 

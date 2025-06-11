@@ -120,7 +120,17 @@ public class ReservaDAO implements CRUD_operaciones<Reserva, String> {
 
         return idReserva;
     }
+    
+    public void delete_por_admin(String id) {
+        String call = "{ call PI1SIDS.eliminar_reserva_modAdmin(?) }";
 
+        try (CallableStatement cstmt = connection.prepareCall(call)) {
+            cstmt.setString(1, id);
+            cstmt.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
 
